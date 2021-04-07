@@ -18,7 +18,7 @@ public class FileEncryptor {
 
     }*/
 
-    public String writeEncryption(String encryption, Act act) {
+    /*public String writeEncryption(String encryption, Act act) {
         String outFile;
         String substring = fileName.substring(fileName.length() - 14, fileName.length() - 4);
         String substring1 = fileName.substring(0, fileName.length() - 14);
@@ -35,7 +35,7 @@ public class FileEncryptor {
             outFile = substring3 + "_decrypted" + substring2;
         FileOp.writeFile(outFile, encryption);
         return outFile;
-    }
+    }*/
 
     public FileEncryptor(EncryptionAlgorithm encryptionAlgorithm) {
         this.encryptionAlgorithm = encryptionAlgorithm;
@@ -78,6 +78,8 @@ public class FileEncryptor {
                 ch = data.charAt(index) + key;
             else
                 ch = data.charAt(index) * key;
+            if(ch<0)
+                ch+=128;
             ch %= 128;
             encryption.setCharAt(index, (char) ch);
         }
