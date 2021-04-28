@@ -41,7 +41,7 @@ public class FileEncryptor {
         }
     }
 
-    public void decryptFile(String fileIn, String fileOut, String keyPath) throws InvalidEncryptionKeyException {
+    public void decryptFile(String fileIn, String fileOut, String keyPath) {
         String data;
         String keyString;
         ArrayList<Integer> keysArray = new ArrayList<>();
@@ -70,11 +70,11 @@ public class FileEncryptor {
 
     private static ArrayList<Integer> arrangeKeys(String keyString) throws InvalidEncryptionKeyException {
         ArrayList<Integer> keysArray = new ArrayList<>();
-        int lastCommaPosition = 0;
+        int lastCommaPosition = -1;
         for (int i = 0; i < keyString.length(); i++) {
             char ch = keyString.charAt(i);
             if (ch == ',') {
-                int currentKey = Integer.parseInt(keyString.substring(lastCommaPosition, i));
+                int currentKey = Integer.parseInt(keyString.substring(lastCommaPosition + 1, i));
                 if (currentKey < 0 || currentKey > Consts.MAX_ASCII_VALUE)
                     throw new InvalidEncryptionKeyException("the key '" + currentKey +
                             "' is not valid, key values must be between 0 and " + Consts.MAX_ASCII_VALUE);

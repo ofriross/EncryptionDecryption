@@ -50,14 +50,14 @@ public class Main {
 
 
         //if (num == 1) {
-        //fe.encryptFolder(directory);
-        fem.encryptFile(directory+"\\tested1.txt",directory+"\\tested1_encrypted.txt",directory+"\\key.txt");
+        //fe.encryptFile(directory+"\\tested1.txt",directory+"\\tested1_encrypted.txt",directory+"\\key.txt");
+        //fem.encryptFile(directory+"\\tested1.txt",directory+"\\tested1_encrypted.txt",directory+"\\key.txt");
         //fex.encryptFolder(directory);
         //feR.encryptFolder(directory);
         //fexd.encryptFolder(directory);
         //fed.encryptFolder(directory);
         //fedd.encryptFolder(directory);
-        //fe3d.encryptFolder(directory);
+        fe3d.encryptFile(directory+"\\tested1.txt",directory+"\\tested1_encrypted.txt",directory+"\\key.txt");
         System.out.print("the files got encrypted.\n");
 
             /*System.out.println("encSU="+encSU.getKeyStrength());
@@ -82,14 +82,14 @@ public class Main {
                 System.out.println(ar.get(i));*/
         //}
         //if (num == 2) {
-        //fe.decryptFolder(directory);
-        fem.encryptFile(directory+"\\tested1_encrypted.txt",directory+"\\tested1_decrypted.txt",directory+"\\key.txt");
+        //fe.decryptFile(directory+"\\tested1_encrypted.txt",directory+"\\tested1_decrypted.txt",directory+"\\key.txt");
+        //fem.decryptFile(directory+"\\tested1_encrypted.txt",directory+"\\tested1_decrypted.txt",directory+"\\key.txt");
         //fex.decryptFolder(directory);
         //fexd.decryptFolder(directory);
         //feR.decryptFolder(directory);
         //fed.decryptFolder(directory);
         //fedd.decryptFolder(directory);
-        //fe3d.decryptFolder(directory);
+        fe3d.decryptFile(directory+"\\tested1_encrypted.txt",directory+"\\tested1_decrypted.txt",directory+"\\key.txt");
         System.out.print("the files got decrypted.\n");
         //}
 
