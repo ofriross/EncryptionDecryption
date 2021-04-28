@@ -1,22 +1,12 @@
+package FileManaging;
+
+import complexEncryptions.EncryptionAlgorithm;
+
 import java.util.Random;
 
 public class FileEncryptor {
     public EncryptionAlgorithm encryptionAlgorithm;
     private String fileName;
-
-    enum Act {
-        encrypt,
-        decrypt
-    }
-
-    enum BaseEnc {
-        shiftUp,
-        shiftMultiply
-    }
-
-    /*enum EncryptionType {
-
-    }*/
 
     /*public String writeEncryption(String encryption, Act act) {
         String outFile;
@@ -33,7 +23,7 @@ public class FileEncryptor {
             outFile = substring1 + "_decrypted" + substring2;
         else
             outFile = substring3 + "_decrypted" + substring2;
-        FileOp.writeFile(outFile, encryption);
+        FileManaging.FileOp.writeFile(outFile, encryption);
         return outFile;
     }*/
 
@@ -43,22 +33,22 @@ public class FileEncryptor {
 
     /*public String encryptFile(String fileIn,String keyPath) {
         this.fileName = fileIn;
-        String data = FileOp.readFile(fileIn);
+        String data = FileManaging.FileOp.readFile(fileIn);
         return writeEncryption(encryptionAlgorithm.encryptFile(data, keyPath,-1), Act.encrypt);
     }*/
 
     public void encryptFile(String fileIn, String fileOut, String keyPath) {
         this.fileName = fileIn;
         String data = FileOp.readFile(fileIn);
-        Key key = new Key();
+
         FileOp.writeFile(fileOut, encryptionAlgorithm.encryptFile(data, key));
         FileOp.writeFile(keyPath, key.toString());
     }
 
     /*public String decryptFile(String fileIn, String keyPath) {
         this.fileName = fileIn;
-        String data = FileOp.readFile(fileIn);
-        String keys = FileOp.readFile(keyPath);
+        String data = FileManaging.FileOp.readFile(fileIn);
+        String keys = FileManaging.FileOp.readFile(keyPath);
         return writeEncryption(encryptionAlgorithm.decryptFile(data, keys), Act.decrypt);
     }*/
 
