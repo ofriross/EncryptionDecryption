@@ -83,7 +83,7 @@ public class Main {
         //}
         //if (num == 2) {
         //fe.decryptFolder(directory);
-        //fem.decryptFolder(directory);
+        fem.encryptFile(directory+"\\tested1_encrypted.txt",directory+"\\tested1_decrypted.txt",directory+"\\key.txt");
         //fex.decryptFolder(directory);
         //fexd.decryptFolder(directory);
         //feR.decryptFolder(directory);

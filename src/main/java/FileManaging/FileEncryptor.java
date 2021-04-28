@@ -1,5 +1,7 @@
 package FileManaging;
 
+import Exceptions.InvalidEncryptionKeyException;
+import General.Consts;
 import Keys.Key;
 import basicEncryptions.BasicEncryption;
 import basicEncryptions.IBasicEncryption;
@@ -39,31 +41,72 @@ public class FileEncryptor {
         }
     }
 
-    public void decryptFile(String fileIn, String fileOut, String keyPath) {
+    public void decryptFile(String fileIn, String fileOut, String keyPath) throws InvalidEncryptionKeyException {
         String data;
+        String keyString;
+        ArrayList<Integer> keysArray = new ArrayList<>();
         try {
             data = FileOperations.readFile(fileIn);
+            keyString = FileOperations.readFile(keyPath);
         } catch (FileNotFoundException exception) {
             exception.printStackTrace();
             return;
         }
-        String encryption = encryptionAlgorithm.encryptFile(data, encryptionAlgorithm.initKey());
         try {
-            FileOperations.writeFile(fileOut, encryption);
-            FileOperations.writeFile(keyPath, key.toString());
+            checkKeyIsValid(keyString);
+            keysArray = arrangeKeys(keyString);
+        } catch (InvalidEncryptionKeyException exception) {
+            exception.printStackTrace();
+            return;
+        }
+        String decryption = encryptionAlgorithm.decryptFile(data, keysArray);
+        try {
+            FileOperations.writeFile(fileOut, decryption);
         } catch (IOException exception) {
             exception.printStackTrace();
             return;
         }
     }
 
-    private static ArrayList<Integer> String(String keyString) {
-        ArrayList<Integer> keys = new ArrayList<>();
-        boolean isLastComma = false;
+    private static ArrayList<Integer> arrangeKeys(String keyString) throws InvalidEncryptionKeyException {
+        ArrayList<Integer> keysArray = new ArrayList<>();
+        int lastCommaPosition = 0;
         for (int i = 0; i < keyString.length(); i++) {
-            ;
+            char ch = keyString.charAt(i);
+            if (ch == ',') {
+                int currentKey = Integer.parseInt(keyString.substring(lastCommaPosition, i));
+                if (currentKey < 0 || currentKey > Consts.MAX_ASCII_VALUE)
+                    throw new InvalidEncryptionKeyException("the key '" + currentKey +
+                            "' is not valid, key values must be between 0 and " + Consts.MAX_ASCII_VALUE);
+                keysArray.add(currentKey);
+                lastCommaPosition = i;
+            }
         }
-        return keys;
+        int currentKey = Integer.parseInt(keyString.substring(lastCommaPosition + 1));
+        if (currentKey < 0 || currentKey > Consts.MAX_ASCII_VALUE)
+            throw new InvalidEncryptionKeyException("the key '" + currentKey +
+                    "' is not valid, key values must be between 0 and " + Consts.MAX_ASCII_VALUE);
+        keysArray.add(currentKey);
+        return keysArray;
+    }
+
+    private static void checkKeyIsValid(String keyString) throws InvalidEncryptionKeyException {
+        boolean isLastComma = true;
+        for (int i = 0; i < keyString.length(); i++) {
+            int ch = keyString.charAt(i);
+            if (ch == ',')
+                if (isLastComma)
+                    throw new InvalidEncryptionKeyException("Key from file must be like 'x,y,z'(x,y,z-numbers)");
+                else
+                    isLastComma = true;
+            else {
+                isLastComma = false;
+                if (ch < '0' || ch > '9')
+                    throw new InvalidEncryptionKeyException("Key from file must be like 'x,y,z'(x,y,z-numbers)");
+            }
+        }
+        if (isLastComma)
+            throw new InvalidEncryptionKeyException("Key from file must be like 'x,y,z'(x,y,z-numbers)");
     }
 
     public static String encryptDecrypt(String data, int key, IBasicEncryption basicEncryption, EAction action) {
