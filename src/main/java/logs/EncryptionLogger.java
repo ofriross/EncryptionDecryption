@@ -15,6 +15,6 @@ public class EncryptionLogger {
 
     public static void addEncryptionLogEvent(EncryptionLogEventArgs encryptionLogEventArgs, IEncryptionAlgorithm encryptionAlgorithm, EEventType eventType, ELogType logType) {
         encryptionLogEventArgsMap.put(new HashMapKey(encryptionAlgorithm, eventType), encryptionLogEventArgs);
-        EncryptionLog4jLogger.writeLog(encryptionLogEventArgs.makeEncryptionLogMessage(), logType);
+        //TODO: add this back //EncryptionLog4jLogger.writeLog(encryptionLogEventArgs.makeEncryptionLogMessage(), logType);
     }
 }

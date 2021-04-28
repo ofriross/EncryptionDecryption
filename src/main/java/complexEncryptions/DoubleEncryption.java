@@ -1,6 +1,5 @@
 package complexEncryptions;
 
-import FileManaging.FileNameAndContent;
 import Keys.DoubleKey;
 import Keys.Key;
 
@@ -14,13 +13,13 @@ public class DoubleEncryption extends EncryptionAlgorithm {
         return key;
     }
 
-    public <T extends Key> ArrayList<FileNameAndContent> encryptFolder(ArrayList<FileNameAndContent> data, T key) {
-        ArrayList<FileNameAndContent> firstEncryption = encryptionAlgorithm.encryptFolder(data, ((DoubleKey) key).getDouble1());
-        return encryptionAlgorithm.encryptFolder(firstEncryption, ((DoubleKey) key).getDouble2());
+    public <T extends Key> String encryptFile(String data, T key) {
+        String firstEncryption = encryptionAlgorithm.encryptFile(data, ((DoubleKey) key).getDouble1());
+        return encryptionAlgorithm.encryptFile(firstEncryption, ((DoubleKey) key).getDouble2());
     }
 
-    public ArrayList<FileNameAndContent> decryptFolder(ArrayList<FileNameAndContent> data, ArrayList<Integer> keys) {
-        return encryptionAlgorithm.decryptFolder(data, keys);
+    public String decryptFile(String data, ArrayList<Integer> keys) {
+        return encryptionAlgorithm.decryptFile(data, keys);
     }
 
     public DoubleEncryption(IEncryptionAlgorithm encryptionAlgorithm) {

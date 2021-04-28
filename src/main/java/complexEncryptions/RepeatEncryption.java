@@ -15,16 +15,16 @@ public class RepeatEncryption extends EncryptionAlgorithm {
         return key;
     }
 
-    public <T extends Key> ArrayList<FileNameAndContent> encryptFolder(ArrayList<FileNameAndContent> data, T key) {
-        ArrayList<FileNameAndContent> encryption = encryptionAlgorithm.encryptFolder(data, ((RepeatKey) key).getRepeatedKey());
+    public <T extends Key> String encryptFile(String data, T key) {
+        String encryption = encryptionAlgorithm.encryptFile(data, ((RepeatKey) key).getRepeatedKey());
         for (int i = 0; i < n - 1; i++) {
-            encryption = encryptionAlgorithm.encryptFolder(encryption, ((RepeatKey) key).getRepeatedKey());
+            encryption = encryptionAlgorithm.encryptFile(encryption, ((RepeatKey) key).getRepeatedKey());
         }
         return encryption;
     }
 
-    public ArrayList<FileNameAndContent> decryptFolder(ArrayList<FileNameAndContent> data, ArrayList<Integer> keys) {
-        return encryptionAlgorithm.decryptFolder(data, keys);
+    public String decryptFile(String data, ArrayList<Integer> keys) {
+        return encryptionAlgorithm.decryptFile(data, keys);
     }
 
     public RepeatEncryption(IEncryptionAlgorithm encryptionAlgorithm, int n) {

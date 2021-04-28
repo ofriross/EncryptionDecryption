@@ -6,16 +6,15 @@ import basicEncryptions.ShiftUpEncryption;
 import basicEncryptions.XorEncryption;
 import complexEncryptions.DoubleEncryption;
 import complexEncryptions.RepeatEncryption;
-import org.apache.log4j.BasicConfigurator;
+/*import org.apache.log4j.BasicConfigurator;*/
 
 import java.io.IOException;
 
 public class Main {
 
     public static void main(String[] args) throws IOException {
-        BasicConfigurator.configure();
         String file = "C:\\enc\\test.txt";
-        String directory = "C:\\enc\\filesToEncrypt";
+        String directory = "debuggingFiles";
         String keyPath = "C:\\enc\\key.txt";
         String keyPathM = "C:\\enc\\keyM.txt";
         String keyPathX = "C:\\enc\\keyX.txt";
@@ -52,7 +51,7 @@ public class Main {
 
         //if (num == 1) {
         //fe.encryptFolder(directory);
-        fem.encryptFolder(directory);
+        fem.encryptFile(directory+"\\tested1.txt",directory+"\\tested1_encrypted.txt",directory+"\\key.txt");
         //fex.encryptFolder(directory);
         //feR.encryptFolder(directory);
         //fexd.encryptFolder(directory);
@@ -84,7 +83,7 @@ public class Main {
         //}
         //if (num == 2) {
         //fe.decryptFolder(directory);
-        fem.decryptFolder(directory);
+        //fem.decryptFolder(directory);
         //fex.decryptFolder(directory);
         //fexd.decryptFolder(directory);
         //feR.decryptFolder(directory);

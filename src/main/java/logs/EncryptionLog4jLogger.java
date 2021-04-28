@@ -1,7 +1,7 @@
 package logs;
 
 import enums.ELogType;
-import org.apache.log4j.Logger;
+/*import org.apache.log4j.Logger;
 
 public class EncryptionLog4jLogger {
     static Logger log = Logger.getLogger(EncryptionLog4jLogger.class.getName());
@@ -28,4 +28,4 @@ public class EncryptionLog4jLogger {
                 break;
         }
     }
-}
+}*/

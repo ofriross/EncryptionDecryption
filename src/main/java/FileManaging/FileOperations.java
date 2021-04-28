@@ -6,8 +6,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 
-public class FileOp {
-    public static String readFile(String fileName) {
+public class FileOperations {
+    public static String readFile(String fileName) throws FileNotFoundException {
         String data = new String();
         try {
             File myObj = new File(fileName);
@@ -17,20 +17,18 @@ public class FileOp {
             }
             myReader.close();
         } catch (FileNotFoundException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
+            throw new FileNotFoundException("The file '" + fileName + "' wasn't found");
         }
         return data;
     }
 
-    public static void writeFile(String fileName, String data) {
+    public static void writeFile(String fileName, String data) throws IOException {
         try {
             FileWriter myWriter = new FileWriter(fileName);
             myWriter.write(data);
             myWriter.close();
         } catch (IOException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
+            throw new IOException("The file '" + fileName + "' wasn't found");
         }
     }
 }

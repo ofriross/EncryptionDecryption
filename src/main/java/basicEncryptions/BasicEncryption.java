@@ -1,7 +1,6 @@
 package basicEncryptions;
 
 import FileManaging.FileEncryptor;
-import FileManaging.FileNameAndContent;
 import Keys.Key;
 import Keys.SingleKey;
 import enums.EAction;
@@ -15,25 +14,15 @@ public abstract class BasicEncryption implements IBasicEncryption {
         return singleKey.getType();
     }
 
-    public <T extends Key> ArrayList<FileNameAndContent> encryptFolder(ArrayList<FileNameAndContent> data, T key) {
-        ArrayList<FileNameAndContent> encryption = new ArrayList<>();
+    public <T extends Key> String encryptFile(String data, T key) {
         int keyValue = ((SingleKey) key).getValue();
-        for (FileNameAndContent datum : data) {
-            String currentFileEncryption = FileEncryptor.encryptDecrypt(datum.getFileContent(), keyValue, this, EAction.encrypt);
-            encryption.add(new FileNameAndContent(datum.getFileName(), currentFileEncryption));
-        }
-        return encryption;
+        return FileEncryptor.encryptDecrypt(data, keyValue, this, EAction.encrypt);
     }
 
-    public ArrayList<FileNameAndContent> decryptFolder(ArrayList<FileNameAndContent> data, ArrayList<Integer> keys) {
-        ArrayList<FileNameAndContent> decryption = new ArrayList<>();
-        for (FileNameAndContent datum : data) {
-            String currentFileDecryption = FileEncryptor.encryptDecrypt(datum.getFileContent(), keys.get(0), this, EAction.decrypt);
-            for (int i = 1; i < keys.size(); i++) {
-                currentFileDecryption = FileEncryptor.encryptDecrypt(currentFileDecryption, keys.get(i), this, EAction.decrypt);
-            }
-            decryption.add(new FileNameAndContent(datum.getFileName(), currentFileDecryption));
-        }
+    public String decryptFile(String data, ArrayList<Integer> keys) {
+        String decryption = FileEncryptor.encryptDecrypt(data, keys.get(0), this, EAction.decrypt);
+        for (int i = 1; i < keys.size(); i++)
+            decryption = FileEncryptor.encryptDecrypt(decryption, keys.get(i), this, EAction.decrypt);
         return decryption;
     }
 
