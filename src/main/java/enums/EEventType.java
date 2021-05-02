@@ -8,8 +8,8 @@ public enum EEventType {
     IOException,
     FileNotFoundException,
     InvalidEncryptionKeyException,
-    encryptionInData,
-    encryptionOutData,
-    decryptionInData,
-    decryptionOutData
+    dataBeforeEncryption,
+    dataAfterEncryption,
+    dataBeforeDecryption,
+    dataAfterDecryption
 }

@@ -6,6 +6,7 @@ import basicEncryptions.ShiftUpEncryption;
 import basicEncryptions.XorEncryption;
 import complexEncryptions.DoubleEncryption;
 import complexEncryptions.RepeatEncryption;
+import org.apache.log4j.BasicConfigurator;
 /*import org.apache.log4j.BasicConfigurator;*/
 
 import java.io.IOException;
@@ -13,6 +14,7 @@ import java.io.IOException;
 public class Main {
 
     public static void main(String[] args) throws IOException {
+        BasicConfigurator.configure();
         String file = "C:\\enc\\test.txt";
         String directory = "debuggingFiles";
         String keyPath = "C:\\enc\\key.txt";
@@ -52,7 +54,7 @@ public class Main {
         //if (num == 1) {
         //fe.encryptFile(directory+"\\tested1.txt",directory+"\\tested1_encrypted.txt",directory+"\\key.txt");
         //fem.encryptFile(directory+"\\tested1.txt",directory+"\\tested1_encrypted.txt",directory+"\\key.txt");
-        //fex.encryptFolder(directory);
+        //fex.encryptFile(directory+"\\tested1.txt",directory+"\\tested1_encrypted.txt",directory+"\\key.txt");
         //feR.encryptFolder(directory);
         //fexd.encryptFolder(directory);
         //fed.encryptFolder(directory);
@@ -84,7 +86,7 @@ public class Main {
         //if (num == 2) {
         //fe.decryptFile(directory+"\\tested1_encrypted.txt",directory+"\\tested1_decrypted.txt",directory+"\\key.txt");
         //fem.decryptFile(directory+"\\tested1_encrypted.txt",directory+"\\tested1_decrypted.txt",directory+"\\key.txt");
-        //fex.decryptFolder(directory);
+        //fex.decryptFile(directory+"\\tested1_encrypted.txt",directory+"\\tested1_decrypted.txt",directory+"\\key.txt");
         //fexd.decryptFolder(directory);
         //feR.decryptFolder(directory);
         //fed.decryptFolder(directory);

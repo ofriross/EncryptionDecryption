@@ -4,13 +4,16 @@ import complexEncryptions.IEncryptionAlgorithm;
 import enums.EEventType;
 import enums.ELogType;
 
+import java.util.Optional;
+
 public class EncryptionProcessLogEventArgs extends EncryptionLogEventArgs {
+
     public EncryptionProcessLogEventArgs(IEncryptionAlgorithm encryptionAlgorithm, String fileIn, String fileOut, long time, EEventType eventType) {
         super(encryptionAlgorithm, fileIn, fileOut, time, eventType);
-        EncryptionLogger.addEncryptionLogEvent(this, encryptionAlgorithm, eventType, ELogType.info);
+        EncryptionLogger.addEncryptionLogEvent(this, encryptionAlgorithm, eventType, ELogType.info, Optional.empty());
     }
 
-    public String makeEncryptionLogMessage() {
+    public String makeEncryptionLogMessage(Optional<String> data) {
         String encryptDecrypt = "encrypt";
         if (eventType == EEventType.decryptEnd || eventType == EEventType.decryptStart)
             encryptDecrypt = "decrypt";

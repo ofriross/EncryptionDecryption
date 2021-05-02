@@ -2,22 +2,22 @@ package logs;
 
 import complexEncryptions.IEncryptionAlgorithm;
 import enums.EEventType;
-import enums.ELogType;
 
-public class EncryptionDebugLogEventArgs extends EncryptionLogEventArgs {
-    private String data;
+import java.util.Optional;
 
-    public EncryptionDebugLogEventArgs(IEncryptionAlgorithm encryptionAlgorithm, String fileIn, String fileOut, long time, EEventType eventType, String data) {
+public class EncryptionProcessDebugLogEventArgs extends EncryptionLogEventArgs {
+
+    public EncryptionProcessDebugLogEventArgs(IEncryptionAlgorithm encryptionAlgorithm, String fileIn, String fileOut, long time, EEventType eventType) {
         super(encryptionAlgorithm, fileIn, fileOut, time, eventType);
-        this.data = data;
-        EncryptionLogger.addEncryptionLogEvent(this, encryptionAlgorithm, eventType, ELogType.debug);
     }
 
-    public String makeEncryptionLogMessage() {
-        String encryptDecrypt = "encrypt";
-        if (eventType == EEventType.decryptionOutData || eventType == EEventType.decryptionInData)
+    public String makeEncryptionLogMessage(Optional<String> data) {
+        String encryptDecrypt;
+        if (eventType == EEventType.dataAfterEncryption || eventType == EEventType.dataBeforeEncryption)
+            encryptDecrypt = "encrypt";
+        else
             encryptDecrypt = "decrypt";
-        if (eventType == EEventType.encryptionInData || eventType == EEventType.decryptionInData)
+        if (eventType == EEventType.dataBeforeEncryption || eventType == EEventType.dataBeforeDecryption)
             return "The " + encryptDecrypt + "ion for file '" + inSource + "' with algorithm " +
                     encryptionAlgorithm.getType() + ", received the data '" + data + "' in time: " +
                     time + "(milliseconds).";
