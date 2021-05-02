@@ -14,7 +14,7 @@ public class EncryptionExceptionLogEventArgs extends EncryptionLogEventArgs {
 
     public String makeEncryptionLogMessage(Optional<String> data) {
         String encryptDecrypt = "encrypt";
-        if (eventType == EEventType.decryptEnd || eventType == EEventType.decryptStart)
+        if (eventType == EEventType.decryptFileEnd || eventType == EEventType.decryptFileStart)
             encryptDecrypt = "decrypt";
         return "The " + encryptDecrypt + "ion for file '" + inSource + "' with algorithm " +
                 encryptionAlgorithm.getType() + " failed due to " + eventType + " in time: " + time + "(milliseconds).";

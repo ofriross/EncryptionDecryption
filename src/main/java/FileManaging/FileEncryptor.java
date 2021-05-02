@@ -18,18 +18,17 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Optional;
 
-public class FileEncryptor {
+public class FileEncryptor{
     public IEncryptionAlgorithm encryptionAlgorithm;
-    private Key key;
+    private final Key key;
 
     public FileEncryptor(IEncryptionAlgorithm encryptionAlgorithm) {
         this.encryptionAlgorithm = encryptionAlgorithm;
         key = encryptionAlgorithm.initKey();
     }
 
-
     public void encryptFile(String fileIn, String fileOut, String keyPath) {
-        new EncryptionProcessLogEventArgs(encryptionAlgorithm, fileIn, fileOut, (new Date().getTime()), EEventType.encryptStart);
+        new EncryptionProcessLogEventArgs(encryptionAlgorithm, fileIn, fileOut, (new Date().getTime()), EEventType.encryptFileStart);
         EncryptionProcessDebugLogEventArgs encryptionProcessDebugLogEventArgs = new EncryptionProcessDebugLogEventArgs(encryptionAlgorithm, fileIn, fileOut, (new Date().getTime()), EEventType.dataBeforeEncryption);
         String data;
         try {
@@ -39,11 +38,7 @@ public class FileEncryptor {
             return;
         }
         EncryptionLogger.addEncryptionLogEvent(encryptionProcessDebugLogEventArgs, encryptionAlgorithm, EEventType.dataBeforeEncryption, ELogType.debug, Optional.of(data));
-        String encryption = encryptionAlgorithm.encryptFile(data, key);
-        while (doesContainProblematicAsciiValues(encryption)) {
-            key.updateKey();
-            encryption = encryptionAlgorithm.encryptFile(data, key);
-        }
+        String encryption = encryptData(data);
         EncryptionLogger.addEncryptionLogEvent(encryptionProcessDebugLogEventArgs, encryptionAlgorithm, EEventType.dataAfterEncryption, ELogType.debug, Optional.of(encryption));
         try {
             FileOperations.writeFile(fileOut, encryption);
@@ -52,14 +47,39 @@ public class FileEncryptor {
             exception.printStackTrace();
             return;
         }
-        new EncryptionProcessLogEventArgs(encryptionAlgorithm, fileIn, fileOut, (new Date().getTime()), EEventType.encryptEnd);
+        new EncryptionProcessLogEventArgs(encryptionAlgorithm, fileIn, fileOut, (new Date().getTime()), EEventType.encryptFileEnd);
+    }
+
+    private String encryptData(String data) {
+        String encryption = encryptionAlgorithm.encryptFile(data, key);
+        while (doesContainProblematicAsciiValues(encryption)) {
+            key.updateKey();
+            encryption = encryptionAlgorithm.encryptFile(data, key);
+        }
+        return encryption;
+    }
+
+    public void encryptFolder(String directory) {
+        ArrayList<String> allFilesNameInFolder;
+        try {
+            allFilesNameInFolder = FileOperations.getFileNamesFromFolder(directory);
+        } catch (IOException exception) {
+            exception.printStackTrace();
+            return;
+        }
+        String folderEncryptedName;
+        folderEncryptedName = FileOperations.createFolder(directory, "encrypted");
+        for (String fileName : allFilesNameInFolder) {
+            encryptFile(directory + "\\" + fileName,
+                    folderEncryptedName + "\\" + fileName,
+                    folderEncryptedName + "\\key.txt");
+        }
     }
 
     public void decryptFile(String fileIn, String fileOut, String keyPath) {
-        new EncryptionProcessLogEventArgs(encryptionAlgorithm, fileIn, fileOut, (new Date().getTime()), EEventType.decryptStart);
+        new EncryptionProcessLogEventArgs(encryptionAlgorithm, fileIn, fileOut, (new Date().getTime()), EEventType.decryptFileStart);
         EncryptionProcessDebugLogEventArgs encryptionProcessDebugLogEventArgs = new EncryptionProcessDebugLogEventArgs(encryptionAlgorithm, fileIn, fileOut, (new Date().getTime()), EEventType.dataBeforeEncryption);
-        String data;
-        String keyString;
+        String data, keyString;
         ArrayList<Integer> keysArray;
         try {
             data = FileOperations.readFile(fileIn);
@@ -84,13 +104,36 @@ public class FileEncryptor {
             exception.printStackTrace();
             return;
         }
-        new EncryptionProcessLogEventArgs(encryptionAlgorithm, fileIn, fileOut, (new Date().getTime()), EEventType.decryptEnd);
+        new EncryptionProcessLogEventArgs(encryptionAlgorithm, fileIn, fileOut, (new Date().getTime()), EEventType.decryptFileEnd);
     }
 
+    public void decryptFolder(String directory) {
+        String folderEncryptedName = directory + "\\encrypted";
+        ArrayList<String> allFilesNameInFolder;
+        try {
+            allFilesNameInFolder = FileOperations.getFileNamesFromFolder(folderEncryptedName);
+        } catch (IOException exception) {
+            exception.printStackTrace();
+            return;
+        }
+        String folderDecryptedName;
+        folderDecryptedName = FileOperations.createFolder(directory, "decrypted");
+        for (String fileName : allFilesNameInFolder) {
+            decryptFile(folderEncryptedName + "\\" + fileName,
+                    folderDecryptedName + "\\" + fileName,
+                    folderEncryptedName + "\\key.txt");
+        }
+    }
+
+    /**
+     * 13 and 113 are problematic to identify between them and 'enter'(10)
+     * in txt object and there for, it check if they exist
+     */
     private static boolean doesContainProblematicAsciiValues(String data) {
         for (int i = 0; i < data.length(); i++) {
-            if (data.charAt(i) == 13 || data.charAt(i) == 113)
+            if (data.charAt(i) == 13 || data.charAt(i) == 113) {
                 return true;
+            }
         }
         return false;
     }

@@ -14,30 +14,47 @@ public class EncryptionProcessLogEventArgs extends EncryptionLogEventArgs {
     }
 
     public String makeEncryptionLogMessage(Optional<String> data) {
-        String encryptDecrypt = "encrypt";
-        if (eventType == EEventType.decryptEnd || eventType == EEventType.decryptStart)
-            encryptDecrypt = "decrypt";
-        if (isStart())
-            return "The " + encryptDecrypt + "ion for folder '" + inSource + "' with algorithm " +
-                    encryptionAlgorithm.getType() + " started in time: " + time + "(milliseconds). The " +
-                    encryptDecrypt + "ed files will be located in folder '" + outSource + "'.";
-        else {
+        String encryptOrDecrypt = "encrypt", fileOrFolder = "file";
+        if (eventType == EEventType.decryptFileEnd || eventType == EEventType.decryptFileStart ||
+                eventType == EEventType.decryptFolderEnd || eventType == EEventType.decryptFolderStart)
+            encryptOrDecrypt = "decrypt";
+        if (eventType == EEventType.encryptFolderEnd || eventType == EEventType.decryptFolderEnd ||
+                eventType == EEventType.encryptFolderStart || eventType == EEventType.decryptFolderStart)
+            fileOrFolder = "folder";
+        String message;
+        if (isStart()) {
+            message = "The " + encryptOrDecrypt + "ion for " + fileOrFolder + " '" + inSource + "' with algorithm " +
+                    encryptionAlgorithm.getType() + " started in time: " + time + "(milliseconds).";
+        } else {
             EncryptionLogEventArgs myStart = EncryptionLogger.findEncryptionLogEventArgs(new HashMapKey(encryptionAlgorithm, getMyStartType()));
-            return "The " + encryptDecrypt + "ion for folder '" + inSource + "' with algorithm " +
+            return "The " + encryptOrDecrypt + "ion for " + fileOrFolder + " '" + inSource + "' with algorithm " +
                     encryptionAlgorithm.getType() + " ended in time: " + time + "(milliseconds). It took" +
-                    " in total " + (time - myStart.time) + " milliseconds. The " + encryptDecrypt + "ed files" +
-                    " are located in folder '" + outSource + "'.";
+                    " in total " + (time - myStart.time) + " milliseconds.";
         }
+        if (fileOrFolder.equals("file"))
+            message += "The " + encryptOrDecrypt + "ed file is located in '" + outSource + "'.";
+        else
+            message += "The " + encryptOrDecrypt + "ed files are located in folder '" + outSource + "'.";
+        return message;
     }
 
     private boolean isStart() {
-        return eventType == EEventType.encryptStart || eventType == EEventType.decryptStart;
+        return eventType == EEventType.encryptFileStart || eventType == EEventType.decryptFileStart ||
+                eventType == EEventType.decryptFolderStart || eventType == EEventType.encryptFolderStart;
     }
 
     private EEventType getMyStartType() {
-        if (eventType == EEventType.encryptEnd)
-            return EEventType.encryptStart;
-        else
-            return EEventType.decryptStart;
+        switch (eventType) {
+            case encryptFileEnd:
+                return EEventType.encryptFileStart;
+            case encryptFolderEnd:
+                return EEventType.encryptFolderStart;
+            case decryptFileEnd:
+                return EEventType.decryptFileStart;
+            case decryptFolderEnd:
+                return EEventType.decryptFolderStart;
+            default:
+                return null;
+        }
     }
 }

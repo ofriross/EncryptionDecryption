@@ -1,10 +1,14 @@
 package enums;
 
 public enum EEventType {
-    encryptStart,
-    encryptEnd,
-    decryptStart,
-    decryptEnd,
+    encryptFileStart,
+    encryptFileEnd,
+    decryptFileStart,
+    decryptFileEnd,
+    encryptFolderStart,
+    encryptFolderEnd,
+    decryptFolderStart,
+    decryptFolderEnd,
     IOException,
     FileNotFoundException,
     InvalidEncryptionKeyException,

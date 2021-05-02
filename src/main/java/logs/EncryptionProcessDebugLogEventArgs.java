@@ -12,17 +12,19 @@ public class EncryptionProcessDebugLogEventArgs extends EncryptionLogEventArgs {
     }
 
     public String makeEncryptionLogMessage(Optional<String> data) {
-        String encryptDecrypt;
+        return "debuglater";
+        /*String encryptDecrypt;
         if (eventType == EEventType.dataAfterEncryption || eventType == EEventType.dataBeforeEncryption)
             encryptDecrypt = "encrypt";
         else
             encryptDecrypt = "decrypt";
+        String dataString = data.toString().substring(9, data.toString().length() - 1);
         if (eventType == EEventType.dataBeforeEncryption || eventType == EEventType.dataBeforeDecryption)
             return "The " + encryptDecrypt + "ion for file '" + inSource + "' with algorithm " +
-                    encryptionAlgorithm.getType() + ", received the data '" + data + "' in time: " +
+                    encryptionAlgorithm.getType() + ", received the data '" + dataString + "' in time: " +
                     time + "(milliseconds).";
         return "The " + encryptDecrypt + "ion for file '" + inSource + "' with algorithm " +
                 encryptionAlgorithm.getType() + ", will write the " + encryptDecrypt + "ed data:'" +
-                data + "' to file '" + outSource + "' in time: " + time + "(milliseconds).";
+                dataString + "' to file '" + outSource + "' in time: " + time + "(milliseconds).";*/
     }
 }

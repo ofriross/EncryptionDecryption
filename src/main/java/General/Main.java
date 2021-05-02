@@ -1,6 +1,8 @@
 package General;
 
 import FileManaging.FileEncryptor;
+import MultiThreading.EncryptionThread;
+import MultiThreading.FileEncryptionMonitor;
 import basicEncryptions.ShiftMultiplyEncryption;
 import basicEncryptions.ShiftUpEncryption;
 import basicEncryptions.XorEncryption;
@@ -59,7 +61,8 @@ public class Main {
         //fexd.encryptFolder(directory);
         //fed.encryptFolder(directory);
         //fedd.encryptFolder(directory);
-        fe3d.encryptFile(directory+"\\tested1.txt",directory+"\\tested1_encrypted.txt",directory+"\\key.txt");
+        //fe3d.encryptFile(directory+"\\tested1.txt",directory+"\\tested1_encrypted.txt",directory+"\\key.txt");
+        //fe.encryptFolder("debuggingFiles");
         System.out.print("the files got encrypted.\n");
 
             /*System.out.println("encSU="+encSU.getKeyStrength());
@@ -91,7 +94,8 @@ public class Main {
         //feR.decryptFolder(directory);
         //fed.decryptFolder(directory);
         //fedd.decryptFolder(directory);
-        fe3d.decryptFile(directory+"\\tested1_encrypted.txt",directory+"\\tested1_decrypted.txt",directory+"\\key.txt");
+        //fe3d.decryptFile(directory+"\\tested1_encrypted.txt",directory+"\\tested1_decrypted.txt",directory+"\\key.txt");
+        //fe.decryptFolder("debuggingFiles");
         System.out.print("the files got decrypted.\n");
         //}
 
@@ -105,5 +109,15 @@ public class Main {
         }
         String directoryLocation = FileOperations.createDirectory("C:\\enc", "encrypted");
         FileOperations.writeMultipleFilesToDirectory(allFilesNameAndData,directoryLocation);*/
+
+        //TODO: make it so the total time of the folder is last
+        FileEncryptionMonitor fileEncryptionMonitor = new FileEncryptionMonitor("debuggingFiles", encSU);
+        EncryptionThread[] encryptionThread = new EncryptionThread[5];
+        for (int i = 0; i < encryptionThread.length; i++) {
+            encryptionThread[i] = new EncryptionThread(fileEncryptionMonitor, fe, "debuggingFiles");
+        }
+        for (int i = 0; i < encryptionThread.length; i++) {
+            encryptionThread[i].start();
+        }
     }
 }
