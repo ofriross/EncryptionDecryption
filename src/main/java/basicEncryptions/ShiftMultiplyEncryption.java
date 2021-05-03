@@ -1,24 +1,27 @@
 package basicEncryptions;
 
-import General.Consts;
+import Exceptions.ProblematicCharInEncryption;
+import General.Constants;
 import Keys.Key;
-import Keys.SingleKey;
-import enums.EAction;
+import enums.EActionEncryptOrDecrypt;
 
 public class ShiftMultiplyEncryption extends BasicEncryption {
     public Key initKey() {
         return super.initKey("Shift Multiply");
     }
 
-    public int computeChar(int ch, int key, EAction eAction) {
+    public int computeChar(int currentChar, int key, EActionEncryptOrDecrypt eActionEncryptOrDecrypt) throws ProblematicCharInEncryption {
         if (key % 2 == 0)
             key += 1;
-        if (eAction == EAction.encrypt)
-            return ch * key;
+        int computedChar = 0;
+        if (eActionEncryptOrDecrypt == EActionEncryptOrDecrypt.encrypt)
+            computedChar = currentChar * key;
         else
-            for (int i = 0; i <= Consts.MAX_ASCII_VALUE; i++)
-                if ((i * key) % (Consts.MAX_ASCII_VALUE + 1) == ch)
-                    return i;
-        return 0;
+            for (int i = 0; i <= Constants.MAX_ASCII_VALUE; i++)
+                if ((i * key) % (Constants.MAX_ASCII_VALUE + 1) == currentChar)
+                    computedChar = i;
+        if (computedChar == 13 || computedChar == 113)
+            throw new ProblematicCharInEncryption();
+            return computedChar;
     }
 }

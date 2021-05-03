@@ -13,5 +13,5 @@ public abstract class Key {
 
     public abstract String getType();
 
-    public abstract void updateKey();
+    public abstract void getNextKey();
 }

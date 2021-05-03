@@ -110,9 +110,9 @@ public class Main {
         String directoryLocation = FileOperations.createDirectory("C:\\enc", "encrypted");
         FileOperations.writeMultipleFilesToDirectory(allFilesNameAndData,directoryLocation);*/
 
-//        SyncDirectoryProcessor syncDirectoryProcessor = new SyncDirectoryProcessor(10, "debuggingFiles", encSU);
-//        syncDirectoryProcessor.encryptDecryptFolder();
+//        SyncDirectoryProcessor syncDirectoryProcessor = new SyncDirectoryProcessor("debuggingFiles", encSU);
+//        syncDirectoryProcessor.encryptAndDecryptFolder();
         ASyncDirectoryProcessor aSyncDirectoryProcessor = new ASyncDirectoryProcessor(10, "debuggingFiles", encSU);
-        aSyncDirectoryProcessor.encryptDecryptFolder();
+        aSyncDirectoryProcessor.encryptAndDecryptFolder();
     }
 }

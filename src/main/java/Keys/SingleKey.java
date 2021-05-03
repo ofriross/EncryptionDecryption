@@ -1,6 +1,6 @@
 package Keys;
 
-import General.Consts;
+import General.Constants;
 
 import java.util.Random;
 
@@ -15,7 +15,7 @@ public class SingleKey extends Key {
     public SingleKey(String encryptionType) {
         this.encryptionType = encryptionType;
         Random r = new Random();
-        value = r.nextInt(Consts.MAX_ASCII_VALUE) + 1;
+        value = r.nextInt(Constants.MAX_ASCII_VALUE) + 1;
         //value=1;
     }
 
@@ -42,9 +42,9 @@ public class SingleKey extends Key {
         return encryptionType;
     }
 
-    public void updateKey() {
+    public void getNextKey() {
         value++;
-        if (value == Consts.MAX_ASCII_VALUE + 1)
+        if (value == Constants.MAX_ASCII_VALUE + 1)
             value = 0;
     }
 }

@@ -5,9 +5,9 @@ import Keys.Key;
 import java.util.ArrayList;
 
 public interface IEncryptionAlgorithm {
-    <T extends Key> String encryptFile(String data, T key);
+    <T extends Key> String performEncryption(String data, T key);
 
-    String decryptFile(String data, ArrayList<Integer> keys);
+    String performDecryption(String data, ArrayList<Integer> keys);
 
     int getKeyStrength();
 

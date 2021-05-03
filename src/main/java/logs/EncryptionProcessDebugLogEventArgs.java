@@ -7,8 +7,8 @@ import java.util.Optional;
 
 public class EncryptionProcessDebugLogEventArgs extends EncryptionLogEventArgs {
 
-    public EncryptionProcessDebugLogEventArgs(IEncryptionAlgorithm encryptionAlgorithm, String fileIn, String fileOut, long time, EEventType eventType) {
-        super(encryptionAlgorithm, fileIn, fileOut, time, eventType);
+    public EncryptionProcessDebugLogEventArgs(IEncryptionAlgorithm encryptionAlgorithm, String inputFilePath, String outputFilePath, long time, EEventType eventType) {
+        super(encryptionAlgorithm, inputFilePath, outputFilePath, time, eventType);
     }
 
     public String makeEncryptionLogMessage(Optional<String> data) {

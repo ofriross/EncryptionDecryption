@@ -1,34 +1,31 @@
 package complexEncryptions;
 
-import FileManaging.FileNameAndContent;
 import Keys.Key;
 import Keys.RepeatKey;
 
 import java.util.ArrayList;
 
 public class RepeatEncryption extends EncryptionAlgorithm {
-    private final int n;
+    private final int timesToRepeat;
 
     public Key initKey() {
-        key = new RepeatKey(n);
-        ((RepeatKey) key).setRepeatedKey(encryptionAlgorithm.initKey());
-        return key;
+        return key = new RepeatKey(timesToRepeat, encryptionAlgorithm.initKey());
     }
 
-    public <T extends Key> String encryptFile(String data, T key) {
-        String encryption = encryptionAlgorithm.encryptFile(data, ((RepeatKey) key).getRepeatedKey());
-        for (int i = 0; i < n - 1; i++) {
-            encryption = encryptionAlgorithm.encryptFile(encryption, ((RepeatKey) key).getRepeatedKey());
+    public <T extends Key> String performEncryption(String data, T key) {
+        String encryption = encryptionAlgorithm.performEncryption(data, ((RepeatKey) key).getRepeatedKey());
+        for (int i = 0; i < timesToRepeat - 1; i++) {
+            encryption = encryptionAlgorithm.performEncryption(encryption, ((RepeatKey) key).getRepeatedKey());
         }
         return encryption;
     }
 
-    public String decryptFile(String data, ArrayList<Integer> keys) {
-        return encryptionAlgorithm.decryptFile(data, keys);
+    public String performDecryption(String data, ArrayList<Integer> keys) {
+        return encryptionAlgorithm.performDecryption(data, keys);
     }
 
-    public RepeatEncryption(IEncryptionAlgorithm encryptionAlgorithm, int n) {
+    public RepeatEncryption(IEncryptionAlgorithm encryptionAlgorithm, int timesToRepeat) {
         super(encryptionAlgorithm);
-        this.n = n;
+        this.timesToRepeat = timesToRepeat;
     }
 }

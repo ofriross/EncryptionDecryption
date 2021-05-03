@@ -8,8 +8,8 @@ import java.util.Optional;
 
 public class EncryptionProcessLogEventArgs extends EncryptionLogEventArgs {
 
-    public EncryptionProcessLogEventArgs(IEncryptionAlgorithm encryptionAlgorithm, String fileIn, String fileOut, long time, EEventType eventType) {
-        super(encryptionAlgorithm, fileIn, fileOut, time, eventType);
+    public EncryptionProcessLogEventArgs(IEncryptionAlgorithm encryptionAlgorithm, String inputFilePath, String outputFilePath, long time, EEventType eventType) {
+        super(encryptionAlgorithm, inputFilePath, outputFilePath, time, eventType);
         EncryptionLogger.addEncryptionLogEvent(this, encryptionAlgorithm, eventType, ELogType.info, Optional.empty());
     }
 

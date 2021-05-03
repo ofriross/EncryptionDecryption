@@ -7,8 +7,8 @@ import enums.ELogType;
 import java.util.Optional;
 
 public class EncryptionExceptionLogEventArgs extends EncryptionLogEventArgs {
-    public EncryptionExceptionLogEventArgs(IEncryptionAlgorithm encryptionAlgorithm, String fileIn, String fileOut, long time, EEventType eventType) {
-        super(encryptionAlgorithm, fileIn, fileOut, time, eventType);
+    public EncryptionExceptionLogEventArgs(IEncryptionAlgorithm encryptionAlgorithm, String inputFilePath, String outputFilePath, long time, EEventType eventType) {
+        super(encryptionAlgorithm, inputFilePath, outputFilePath, time, eventType);
         EncryptionLogger.addEncryptionLogEvent(this, encryptionAlgorithm, eventType, ELogType.error, Optional.empty());
     }
 

@@ -1,9 +1,8 @@
 package EncriptionsTests;
 
-import General.Consts;
-import basicEncryptions.ShiftMultiplyEncryption;
+import General.Constants;
 import basicEncryptions.ShiftUpEncryption;
-import enums.EAction;
+import enums.EActionEncryptOrDecrypt;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -26,18 +25,18 @@ public class ShiftUpEncryptionTest {
         ArrayList<String> expectedEncryption = new ArrayList<>();
         data.add("bcd");
         expectedEncryption.add("abc");
-        BasicEncryptionFunctions.testerEncryptFile(Consts.MAX_ASCII_VALUE, data, expectedEncryption, new ShiftUpEncryption());
+        BasicEncryptionFunctions.testerEncryptFile(Constants.MAX_ASCII_VALUE, data, expectedEncryption, new ShiftUpEncryption());
     }
 
     @Test
     public void computeCharDecryptBasicCase() {
-        int actualResult = (new ShiftUpEncryption()).computeChar(40, 3, EAction.decrypt);
+        int actualResult = (new ShiftUpEncryption()).computeChar(40, 3, EActionEncryptOrDecrypt.decrypt);
         assertEquals(37, actualResult);
     }
 
     @Test
     public void computeCharEncryptBasicCase() {
-        int actualResult = (new ShiftUpEncryption()).computeChar(40, 3, EAction.encrypt);
+        int actualResult = (new ShiftUpEncryption()).computeChar(40, 3, EActionEncryptOrDecrypt.encrypt);
         assertEquals(43, actualResult);
     }
 }

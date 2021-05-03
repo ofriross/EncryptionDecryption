@@ -1,5 +1,7 @@
 package Keys;
 
+import complexEncryptions.IEncryptionAlgorithm;
+
 public class RepeatKey extends Key {
     private final int repeatN;
     private Key repeatedKey;
@@ -12,8 +14,9 @@ public class RepeatKey extends Key {
         return repeatedKey;
     }
 
-    public RepeatKey(int repeatN) {
+    public RepeatKey(int repeatN, Key repeatedKey) {
         this.repeatN = repeatN;
+        this.repeatedKey = repeatedKey;
     }
 
     public String toString() {
@@ -32,7 +35,7 @@ public class RepeatKey extends Key {
         return "Repeat of " + repeatN + " times of " + repeatedKey.getType();
     }
 
-    public void updateKey() {
-        repeatedKey.updateKey();
+    public void getNextKey() {
+        repeatedKey.getNextKey();
     }
 }

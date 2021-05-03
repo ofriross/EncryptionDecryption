@@ -15,7 +15,7 @@ public class ASyncDirectoryProcessor implements IDirectoryProcessor {
         }
     }
 
-    public void encryptDecryptFolder() {
+    public void encryptAndDecryptFolder() {
         for (EncryptionDecryptionThread thread : encryptionDecryptionThreads) {
             thread.start();
         }

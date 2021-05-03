@@ -1,19 +1,14 @@
 package FileManagingTests;
 
 import FileManaging.FileEncryptor;
-import FileManaging.FileNameAndContent;
 import FileManaging.FileOperations;
 import basicEncryptions.IBasicEncryption;
 import basicEncryptions.ShiftUpEncryption;
-import complexEncryptions.IEncryptionAlgorithm;
-import enums.EAction;
+import enums.EActionEncryptOrDecrypt;
 //TODO: add this back //import org.apache.log4j.BasicConfigurator;
 import org.junit.Test;
-import org.mockito.MockedStatic;
-import org.mockito.Mockito;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -21,18 +16,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class FileEncryptorTest {
-
-    @Test
-    public void encryptDecrypt() {
-        IBasicEncryption basicEncryptionMock = mock(IBasicEncryption.class);
-        int randomKey = 3;
-        when(basicEncryptionMock.computeChar('a', randomKey, EAction.encrypt)).thenReturn((int) 'b');
-        when(basicEncryptionMock.computeChar('b', randomKey, EAction.encrypt)).thenReturn((int) 'c');
-
-        String actualResult = FileEncryptor.encryptDecrypt("ab", randomKey, basicEncryptionMock, EAction.encrypt);
-
-        assertEquals("bc", actualResult);
-    }
 
     @Test
     public void encryptAndDecryptIntegrationBasicShiftUp() {

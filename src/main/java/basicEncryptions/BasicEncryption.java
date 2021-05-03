@@ -1,9 +1,11 @@
 package basicEncryptions;
 
+import Exceptions.ProblematicCharInEncryption;
 import FileManaging.FileEncryptor;
+import General.Constants;
 import Keys.Key;
 import Keys.SingleKey;
-import enums.EAction;
+import enums.EActionEncryptOrDecrypt;
 
 import java.util.ArrayList;
 
@@ -14,21 +16,39 @@ public abstract class BasicEncryption implements IBasicEncryption {
         return singleKey.getType();
     }
 
-    public <T extends Key> String encryptFile(String data, T key) {
+    public <T extends Key> String performEncryption(String data, T key) {
         int keyValue = ((SingleKey) key).getValue();
-        return FileEncryptor.encryptDecrypt(data, keyValue, this, EAction.encrypt);
+        return encryptDecrypt(data, keyValue, this, EActionEncryptOrDecrypt.encrypt);
     }
 
-    public String decryptFile(String data, ArrayList<Integer> keys) {
-        String decryption = FileEncryptor.encryptDecrypt(data, keys.get(0), this, EAction.decrypt);
-        for (int i = 1; i < keys.size(); i++)
-            decryption = FileEncryptor.encryptDecrypt(decryption, keys.get(i), this, EAction.decrypt);
-        return decryption;
+    public String performDecryption(String data, ArrayList<Integer> keys) {
+        String decryptedData = null;
+        for (Integer key : keys)
+            decryptedData = encryptDecrypt(decryptedData != null ? decryptedData : data, key, this, EActionEncryptOrDecrypt.decrypt);
+        return decryptedData;
     }
 
     public Key initKey(String encryptionType) {
         this.singleKey = new SingleKey(encryptionType);
         return singleKey;
+    }
+
+    private static String encryptDecrypt(String data, int key, IBasicEncryption basicEncryption, EActionEncryptOrDecrypt action) {
+        StringBuilder encryption = new StringBuilder(data);
+        for (int index = 0; index < data.length(); index++) {
+            int currentChar;
+            try {
+                currentChar = basicEncryption.computeChar(data.charAt(index), key, action);
+            } catch (ProblematicCharInEncryption problematicCharInEncryption) {
+                problematicCharInEncryption.printStackTrace();
+                return null;//TODO: fix this
+            }
+            while (currentChar < 0)
+                currentChar += (Constants.MAX_ASCII_VALUE + 1);
+            currentChar %= (Constants.MAX_ASCII_VALUE + 1);
+            encryption.setCharAt(index, (char) currentChar);
+        }
+        return encryption.toString();
     }
 
     public int getKeyStrength() {

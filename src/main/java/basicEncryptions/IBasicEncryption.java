@@ -1,8 +1,9 @@
 package basicEncryptions;
 
+import Exceptions.ProblematicCharInEncryption;
 import complexEncryptions.IEncryptionAlgorithm;
-import enums.EAction;
+import enums.EActionEncryptOrDecrypt;
 
 public interface IBasicEncryption extends IEncryptionAlgorithm {
-    int computeChar(int ch, int key, EAction EAction);
+    int computeChar(int currentChar, int key, EActionEncryptOrDecrypt EActionEncryptOrDecrypt) throws ProblematicCharInEncryption;
 }

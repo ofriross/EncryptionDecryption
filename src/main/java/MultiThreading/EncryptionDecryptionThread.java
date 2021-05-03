@@ -1,7 +1,10 @@
 package MultiThreading;
 
 import FileManaging.FileEncryptor;
-import enums.EAction;
+import General.Constants;
+import enums.EActionEncryptOrDecrypt;
+
+import java.io.IOException;
 
 public class EncryptionDecryptionThread extends Thread {
     private final FolderEncryptionMonitor folderEncryptionMonitor;
@@ -16,17 +19,28 @@ public class EncryptionDecryptionThread extends Thread {
 
     @Override
     public void run() {
-        FileToEncryptDecrypt fileToEncryptDecrypt = folderEncryptionMonitor.getFileToEncryptDecrypt();
+        FileToEncryptDecrypt fileToEncryptDecrypt = folderEncryptionMonitor.getNextFileToEncryptDecrypt();
         while (fileToEncryptDecrypt != null) {
-            if (fileToEncryptDecrypt.getAction() == EAction.encrypt) {
-                fileEncryptor.encryptFile(directory + "\\" + fileToEncryptDecrypt.getFileName(),
-                        directory + "\\encrypted\\" + fileToEncryptDecrypt.getFileName(), directory + "\\encrypted\\key.txt");
+            if (fileToEncryptDecrypt.getAction() == EActionEncryptOrDecrypt.encrypt) {
+                try {
+                    fileEncryptor.encryptFile(directory + "\\" + fileToEncryptDecrypt.getFileName(),
+                            directory + "\\" + Constants.ENCRYPT_FOLDER_NAME + "\\" + fileToEncryptDecrypt.getFileName(),
+                            directory + "\\" + Constants.ENCRYPT_FOLDER_NAME + "\\" + Constants.KEY_FILE_NAME + ".txt");
+                } catch (IOException exception) {
+                    throw new RuntimeException(exception);
+                }
+
             } else {
-                fileEncryptor.decryptFile(directory + "\\encrypted\\" + fileToEncryptDecrypt.getFileName(),
-                        directory + "\\decrypted\\" + fileToEncryptDecrypt.getFileName(), directory + "\\encrypted\\key.txt");
+                try {
+                    fileEncryptor.decryptFile(directory + "\\" + Constants.ENCRYPT_FOLDER_NAME + "\\" + fileToEncryptDecrypt.getFileName(),
+                            directory + "\\" + Constants.DECRYPT_FOLDER_NAME + "\\" + fileToEncryptDecrypt.getFileName(),
+                            directory + "\\" + Constants.ENCRYPT_FOLDER_NAME + "\\" + Constants.KEY_FILE_NAME + ".txt");
+                } catch (Exception exception) {
+                    throw new RuntimeException(exception);
+                }
             }
             folderEncryptionMonitor.imDone();
-            fileToEncryptDecrypt = folderEncryptionMonitor.getFileToEncryptDecrypt();
+            fileToEncryptDecrypt = folderEncryptionMonitor.getNextFileToEncryptDecrypt();
         }
     }
 }

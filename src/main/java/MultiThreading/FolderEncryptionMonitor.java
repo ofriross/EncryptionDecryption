@@ -1,8 +1,9 @@
 package MultiThreading;
 
 import FileManaging.FileOperations;
+import General.Constants;
 import complexEncryptions.IEncryptionAlgorithm;
-import enums.EAction;
+import enums.EActionEncryptOrDecrypt;
 import enums.EEventType;
 import logs.EncryptionProcessLogEventArgs;
 
@@ -16,6 +17,7 @@ public class FolderEncryptionMonitor {
     private final String directory;
     private int startedThreadsCount = 0;
     private int endedThreadsCount = 0;
+    private boolean logPrintDecryptOnce = false;
 
     public FolderEncryptionMonitor(String directory, IEncryptionAlgorithm encryptionAlgorithm) {
         this.encryptionAlgorithm = encryptionAlgorithm;
@@ -26,29 +28,38 @@ public class FolderEncryptionMonitor {
             exception.printStackTrace();
             return;
         }
-        FileOperations.createFolder(directory, "encrypted");
-        FileOperations.createFolder(directory, "decrypted");
+        FileOperations.createFolder(directory, Constants.ENCRYPT_FOLDER_NAME);
+        FileOperations.createFolder(directory, Constants.DECRYPT_FOLDER_NAME);
     }
 
-    public synchronized FileToEncryptDecrypt getFileToEncryptDecrypt() {
+    public synchronized FileToEncryptDecrypt getNextFileToEncryptDecrypt() {
         startedThreadsCount++;
         if (startedThreadsCount == 1)
-            new EncryptionProcessLogEventArgs(encryptionAlgorithm, directory, directory + "\\encrypted", (new Date()).getTime(), EEventType.encryptFolderStart);
+            new EncryptionProcessLogEventArgs(encryptionAlgorithm, directory, directory + "\\" + Constants.ENCRYPT_FOLDER_NAME, (new Date()).getTime(), EEventType.encryptFolderStart);
         if (startedThreadsCount <= allFilesNames.size())
-            return new FileToEncryptDecrypt(allFilesNames.get(startedThreadsCount - 1), EAction.encrypt);
-        if (startedThreadsCount == allFilesNames.size() + 1)
-            new EncryptionProcessLogEventArgs(encryptionAlgorithm,  directory + "\\encrypted", directory + "\\decrypted", (new Date()).getTime(), EEventType.decryptFolderStart);
+            return new FileToEncryptDecrypt(allFilesNames.get(startedThreadsCount - 1), EActionEncryptOrDecrypt.encrypt);
+        while (endedThreadsCount < allFilesNames.size()) {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        if (!logPrintDecryptOnce) {
+            new EncryptionProcessLogEventArgs(encryptionAlgorithm, directory + "\\" + Constants.ENCRYPT_FOLDER_NAME, directory + "\\" + Constants.DECRYPT_FOLDER_NAME, (new Date()).getTime(), EEventType.decryptFolderStart);
+            logPrintDecryptOnce = true;
+        }
         if (startedThreadsCount <= 2 * allFilesNames.size())
-            return new FileToEncryptDecrypt(allFilesNames.get(startedThreadsCount - 1 - allFilesNames.size()), EAction.decrypt);
+            return new FileToEncryptDecrypt(allFilesNames.get(startedThreadsCount - 1 - allFilesNames.size()), EActionEncryptOrDecrypt.decrypt);
         return null;
     }
 
     public synchronized void imDone() {
         endedThreadsCount++;
         if (endedThreadsCount == allFilesNames.size())
-            new EncryptionProcessLogEventArgs(encryptionAlgorithm, directory, directory + "\\encrypted", (new Date()).getTime(), EEventType.encryptFolderEnd);
+            new EncryptionProcessLogEventArgs(encryptionAlgorithm, directory, directory + "\\" + Constants.ENCRYPT_FOLDER_NAME, (new Date()).getTime(), EEventType.encryptFolderEnd);
         if (endedThreadsCount == 2 * allFilesNames.size())
-            new EncryptionProcessLogEventArgs(encryptionAlgorithm, directory + "\\encrypted", directory + "\\decrypted", (new Date()).getTime(), EEventType.decryptFolderEnd);
-
+            new EncryptionProcessLogEventArgs(encryptionAlgorithm, directory + "\\" + Constants.ENCRYPT_FOLDER_NAME, directory + "\\" + Constants.DECRYPT_FOLDER_NAME, (new Date()).getTime(), EEventType.decryptFolderEnd);
+        notifyAll();
     }
 }

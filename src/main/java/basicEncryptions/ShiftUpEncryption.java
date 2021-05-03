@@ -1,7 +1,7 @@
 package basicEncryptions;
 
 import Keys.Key;
-import enums.EAction;
+import enums.EActionEncryptOrDecrypt;
 
 public class ShiftUpEncryption extends BasicEncryption {
 
@@ -9,9 +9,9 @@ public class ShiftUpEncryption extends BasicEncryption {
         return super.initKey("Shift Up");
     }
 
-    public int computeChar(int ch, int key, EAction eAction) {
-        if (eAction == EAction.decrypt)
+    public int computeChar(int currentChar, int key, EActionEncryptOrDecrypt eActionEncryptOrDecrypt) {
+        if (eActionEncryptOrDecrypt == EActionEncryptOrDecrypt.decrypt)
             key = -key;
-        return ch + key;
+        return currentChar + key;
     }
 }

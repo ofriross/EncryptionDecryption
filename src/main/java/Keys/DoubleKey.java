@@ -5,11 +5,8 @@ public class DoubleKey extends Key {
 
     private Key double2;
 
-    public void setDouble1(Key double1) {
+    public DoubleKey(Key double1, Key double2) {
         this.double1 = double1;
-    }
-
-    public void setDouble2(Key double2) {
         this.double2 = double2;
     }
 
@@ -38,7 +35,7 @@ public class DoubleKey extends Key {
         return "Double of " + double1.getType();
     }
 
-    public void updateKey() {
-        double1.updateKey();
+    public void getNextKey() {
+        double1.getNextKey();
     }
 }

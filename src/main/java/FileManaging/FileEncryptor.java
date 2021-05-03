@@ -1,11 +1,11 @@
 package FileManaging;
 
 import Exceptions.InvalidEncryptionKeyException;
-import General.Consts;
+import General.Constants;
 import Keys.Key;
 import basicEncryptions.IBasicEncryption;
 import complexEncryptions.IEncryptionAlgorithm;
-import enums.EAction;
+import enums.EActionEncryptOrDecrypt;
 import enums.EEventType;
 import enums.ELogType;
 import logs.EncryptionLogger;
@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Optional;
 
-public class FileEncryptor{
+public class FileEncryptor {
     public IEncryptionAlgorithm encryptionAlgorithm;
     private final Key key;
 
@@ -27,102 +27,64 @@ public class FileEncryptor{
         key = encryptionAlgorithm.initKey();
     }
 
-    public void encryptFile(String fileIn, String fileOut, String keyPath) {
-        new EncryptionProcessLogEventArgs(encryptionAlgorithm, fileIn, fileOut, (new Date().getTime()), EEventType.encryptFileStart);
-        EncryptionProcessDebugLogEventArgs encryptionProcessDebugLogEventArgs = new EncryptionProcessDebugLogEventArgs(encryptionAlgorithm, fileIn, fileOut, (new Date().getTime()), EEventType.dataBeforeEncryption);
+    public void encryptFile(String inputFilePath, String outputFilePath, String keyPath) throws IOException {
+        //TODO: don't re-make me every time.
+        new EncryptionProcessLogEventArgs(encryptionAlgorithm, inputFilePath, outputFilePath, (new Date().getTime()), EEventType.encryptFileStart);
+        EncryptionProcessDebugLogEventArgs encryptionProcessDebugLogEventArgs = new EncryptionProcessDebugLogEventArgs(encryptionAlgorithm, inputFilePath, outputFilePath, (new Date().getTime()), EEventType.dataBeforeEncryption);
         String data;
         try {
-            data = FileOperations.readFile(fileIn);
+            data = FileOperations.readFile(inputFilePath);
         } catch (FileNotFoundException exception) {
-            exception.printStackTrace();
-            return;
+            throw exception;
         }
         EncryptionLogger.addEncryptionLogEvent(encryptionProcessDebugLogEventArgs, encryptionAlgorithm, EEventType.dataBeforeEncryption, ELogType.debug, Optional.of(data));
-        String encryption = encryptData(data);
-        EncryptionLogger.addEncryptionLogEvent(encryptionProcessDebugLogEventArgs, encryptionAlgorithm, EEventType.dataAfterEncryption, ELogType.debug, Optional.of(encryption));
+        String encryptedData = encryptData(data);
+        EncryptionLogger.addEncryptionLogEvent(encryptionProcessDebugLogEventArgs, encryptionAlgorithm, EEventType.dataAfterEncryption, ELogType.debug, Optional.of(encryptedData));
         try {
-            FileOperations.writeFile(fileOut, encryption);
+            FileOperations.writeFile(outputFilePath, encryptedData);
             FileOperations.writeFile(keyPath, key.toString());
         } catch (IOException exception) {
-            exception.printStackTrace();
-            return;
+            throw exception;
         }
-        new EncryptionProcessLogEventArgs(encryptionAlgorithm, fileIn, fileOut, (new Date().getTime()), EEventType.encryptFileEnd);
+        new EncryptionProcessLogEventArgs(encryptionAlgorithm, inputFilePath, outputFilePath, (new Date().getTime()), EEventType.encryptFileEnd);
     }
 
     private String encryptData(String data) {
-        String encryption = encryptionAlgorithm.encryptFile(data, key);
-        while (doesContainProblematicAsciiValues(encryption)) {
-            key.updateKey();
-            encryption = encryptionAlgorithm.encryptFile(data, key);
+        String encryptedData = encryptionAlgorithm.performEncryption(data, key);
+        //TODO: catch the problem in computeChar
+        while (doesContainProblematicAsciiValues(encryptedData)) {
+            key.getNextKey();
+            encryptedData = encryptionAlgorithm.performEncryption(data, key);
         }
-        return encryption;
+        return encryptedData;
     }
 
-    public void encryptFolder(String directory) {
-        ArrayList<String> allFilesNameInFolder;
-        try {
-            allFilesNameInFolder = FileOperations.getFileNamesFromFolder(directory);
-        } catch (IOException exception) {
-            exception.printStackTrace();
-            return;
-        }
-        String folderEncryptedName;
-        folderEncryptedName = FileOperations.createFolder(directory, "encrypted");
-        for (String fileName : allFilesNameInFolder) {
-            encryptFile(directory + "\\" + fileName,
-                    folderEncryptedName + "\\" + fileName,
-                    folderEncryptedName + "\\key.txt");
-        }
-    }
-
-    public void decryptFile(String fileIn, String fileOut, String keyPath) {
-        new EncryptionProcessLogEventArgs(encryptionAlgorithm, fileIn, fileOut, (new Date().getTime()), EEventType.decryptFileStart);
-        EncryptionProcessDebugLogEventArgs encryptionProcessDebugLogEventArgs = new EncryptionProcessDebugLogEventArgs(encryptionAlgorithm, fileIn, fileOut, (new Date().getTime()), EEventType.dataBeforeEncryption);
+    public void decryptFile(String inputFilePath, String outputFilePath, String keyPath) throws IOException, InvalidEncryptionKeyException {
+        new EncryptionProcessLogEventArgs(encryptionAlgorithm, inputFilePath, outputFilePath, (new Date().getTime()), EEventType.decryptFileStart);
+        EncryptionProcessDebugLogEventArgs encryptionProcessDebugLogEventArgs = new EncryptionProcessDebugLogEventArgs(encryptionAlgorithm, inputFilePath, outputFilePath, (new Date().getTime()), EEventType.dataBeforeEncryption);
         String data, keyString;
-        ArrayList<Integer> keysArray;
         try {
-            data = FileOperations.readFile(fileIn);
+            data = FileOperations.readFile(inputFilePath);
             keyString = FileOperations.readFile(keyPath);
         } catch (FileNotFoundException exception) {
-            exception.printStackTrace();
-            return;
+            throw exception;
         }
         EncryptionLogger.addEncryptionLogEvent(encryptionProcessDebugLogEventArgs, encryptionAlgorithm, EEventType.dataBeforeDecryption, ELogType.debug, Optional.of(data));
+        ArrayList<Integer> keysArray;
         try {
             checkKeyIsValid(keyString);
             keysArray = arrangeKeys(keyString);
         } catch (InvalidEncryptionKeyException exception) {
-            exception.printStackTrace();
-            return;
+            throw exception;
         }
-        String decryption = encryptionAlgorithm.decryptFile(data, keysArray);
+        String decryptedData = encryptionAlgorithm.performDecryption(data, keysArray);
         EncryptionLogger.addEncryptionLogEvent(encryptionProcessDebugLogEventArgs, encryptionAlgorithm, EEventType.dataAfterDecryption, ELogType.debug, Optional.of(data));
         try {
-            FileOperations.writeFile(fileOut, decryption);
+            FileOperations.writeFile(outputFilePath, decryptedData);
         } catch (IOException exception) {
-            exception.printStackTrace();
-            return;
+            throw exception;
         }
-        new EncryptionProcessLogEventArgs(encryptionAlgorithm, fileIn, fileOut, (new Date().getTime()), EEventType.decryptFileEnd);
-    }
-
-    public void decryptFolder(String directory) {
-        String folderEncryptedName = directory + "\\encrypted";
-        ArrayList<String> allFilesNameInFolder;
-        try {
-            allFilesNameInFolder = FileOperations.getFileNamesFromFolder(folderEncryptedName);
-        } catch (IOException exception) {
-            exception.printStackTrace();
-            return;
-        }
-        String folderDecryptedName;
-        folderDecryptedName = FileOperations.createFolder(directory, "decrypted");
-        for (String fileName : allFilesNameInFolder) {
-            decryptFile(folderEncryptedName + "\\" + fileName,
-                    folderDecryptedName + "\\" + fileName,
-                    folderEncryptedName + "\\key.txt");
-        }
+        new EncryptionProcessLogEventArgs(encryptionAlgorithm, inputFilePath, outputFilePath, (new Date().getTime()), EEventType.decryptFileEnd);
     }
 
     /**
@@ -145,17 +107,17 @@ public class FileEncryptor{
             char ch = keyString.charAt(i);
             if (ch == ',') {
                 int currentKey = Integer.parseInt(keyString.substring(lastCommaPosition + 1, i));
-                if (currentKey < 0 || currentKey > Consts.MAX_ASCII_VALUE)
+                if (currentKey < 0 || currentKey > Constants.MAX_ASCII_VALUE)
                     throw new InvalidEncryptionKeyException("the key '" + currentKey +
-                            "' is not valid, key values must be between 0 and " + Consts.MAX_ASCII_VALUE);
+                            "' is not valid, key values must be between 0 and " + Constants.MAX_ASCII_VALUE);
                 keysArray.add(currentKey);
                 lastCommaPosition = i;
             }
         }
         int currentKey = Integer.parseInt(keyString.substring(lastCommaPosition + 1));
-        if (currentKey < 0 || currentKey > Consts.MAX_ASCII_VALUE)
+        if (currentKey < 0 || currentKey > Constants.MAX_ASCII_VALUE)
             throw new InvalidEncryptionKeyException("the key '" + currentKey +
-                    "' is not valid, key values must be between 0 and " + Consts.MAX_ASCII_VALUE);
+                    "' is not valid, key values must be between 0 and " + Constants.MAX_ASCII_VALUE);
         keysArray.add(currentKey);
         return keysArray;
     }
@@ -177,17 +139,5 @@ public class FileEncryptor{
         }
         if (isLastComma)
             throw new InvalidEncryptionKeyException("Key from file must be like 'x,y,z'(x,y,z-numbers)");
-    }
-
-    public static String encryptDecrypt(String data, int key, IBasicEncryption basicEncryption, EAction action) {
-        StringBuilder encryption = new StringBuilder(data);
-        for (int index = 0; index < data.length(); index++) {
-            int ch = basicEncryption.computeChar(data.charAt(index), key, action);
-            while (ch < 0)
-                ch += (Consts.MAX_ASCII_VALUE + 1);
-            ch %= (Consts.MAX_ASCII_VALUE + 1);
-            encryption.setCharAt(index, (char) ch);
-        }
-        return encryption.toString();
     }
 }

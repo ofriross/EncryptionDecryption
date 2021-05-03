@@ -1,12 +1,12 @@
 package MultiThreading;
 
-import enums.EAction;
+import enums.EActionEncryptOrDecrypt;
 
 public class FileToEncryptDecrypt {
     private String fileName;
-    private EAction action;
+    private EActionEncryptOrDecrypt action;
 
-    public FileToEncryptDecrypt(String fileName, EAction action) {
+    public FileToEncryptDecrypt(String fileName, EActionEncryptOrDecrypt action) {
         this.fileName = fileName;
         this.action = action;
     }
@@ -15,7 +15,7 @@ public class FileToEncryptDecrypt {
         return fileName;
     }
 
-    public EAction getAction() {
+    public EActionEncryptOrDecrypt getAction() {
         return action;
     }
 }

@@ -1,6 +1,6 @@
 package enums;
 
-public enum EAction {
+public enum EActionEncryptOrDecrypt {
     encrypt,
     decrypt
 }

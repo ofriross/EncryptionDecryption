@@ -7,19 +7,16 @@ import java.util.ArrayList;
 
 public class DoubleEncryption extends EncryptionAlgorithm {
     public Key initKey() {
-        key = new DoubleKey();
-        ((DoubleKey) key).setDouble1(encryptionAlgorithm.initKey());
-        ((DoubleKey) key).setDouble2(encryptionAlgorithm.initKey());
-        return key;
+        return key = new DoubleKey(encryptionAlgorithm.initKey(), encryptionAlgorithm.initKey());
     }
 
-    public <T extends Key> String encryptFile(String data, T key) {
-        String firstEncryption = encryptionAlgorithm.encryptFile(data, ((DoubleKey) key).getDouble1());
-        return encryptionAlgorithm.encryptFile(firstEncryption, ((DoubleKey) key).getDouble2());
+    public <T extends Key> String performEncryption(String data, T key) {
+        String firstEncryption = encryptionAlgorithm.performEncryption(data, ((DoubleKey) key).getDouble1());
+        return encryptionAlgorithm.performEncryption(firstEncryption, ((DoubleKey) key).getDouble2());
     }
 
-    public String decryptFile(String data, ArrayList<Integer> keys) {
-        return encryptionAlgorithm.decryptFile(data, keys);
+    public String performDecryption(String data, ArrayList<Integer> keys) {
+        return encryptionAlgorithm.performDecryption(data, keys);
     }
 
     public DoubleEncryption(IEncryptionAlgorithm encryptionAlgorithm) {
