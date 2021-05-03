@@ -1,8 +1,8 @@
 package General;
 
 import FileManaging.FileEncryptor;
-import MultiThreading.EncryptionThread;
-import MultiThreading.FileEncryptionMonitor;
+import MultiThreading.ASyncDirectoryProcessor;
+import MultiThreading.SyncDirectoryProcessor;
 import basicEncryptions.ShiftMultiplyEncryption;
 import basicEncryptions.ShiftUpEncryption;
 import basicEncryptions.XorEncryption;
@@ -110,14 +110,9 @@ public class Main {
         String directoryLocation = FileOperations.createDirectory("C:\\enc", "encrypted");
         FileOperations.writeMultipleFilesToDirectory(allFilesNameAndData,directoryLocation);*/
 
-        //TODO: make it so the total time of the folder is last
-        FileEncryptionMonitor fileEncryptionMonitor = new FileEncryptionMonitor("debuggingFiles", encSU);
-        EncryptionThread[] encryptionThread = new EncryptionThread[5];
-        for (int i = 0; i < encryptionThread.length; i++) {
-            encryptionThread[i] = new EncryptionThread(fileEncryptionMonitor, fe, "debuggingFiles");
-        }
-        for (int i = 0; i < encryptionThread.length; i++) {
-            encryptionThread[i].start();
-        }
+//        SyncDirectoryProcessor syncDirectoryProcessor = new SyncDirectoryProcessor(10, "debuggingFiles", encSU);
+//        syncDirectoryProcessor.encryptDecryptFolder();
+        ASyncDirectoryProcessor aSyncDirectoryProcessor = new ASyncDirectoryProcessor(10, "debuggingFiles", encSU);
+        aSyncDirectoryProcessor.encryptDecryptFolder();
     }
 }

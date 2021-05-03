@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class FileOperations {
-    public static String readFile(String fileName) throws FileNotFoundException {
+    public static synchronized String readFile(String fileName) throws FileNotFoundException {
         StringBuilder data = new StringBuilder();
         try {
             File myObj = new File(fileName);
