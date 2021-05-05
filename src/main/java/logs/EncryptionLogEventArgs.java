@@ -1,7 +1,7 @@
 package logs;
 
+import Events.EventType;
 import complexEncryptions.IEncryptionAlgorithm;
-import enums.EEventType;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -10,10 +10,10 @@ public abstract class EncryptionLogEventArgs {
     protected final IEncryptionAlgorithm encryptionAlgorithm;
     protected final String outSource;
     protected final String inSource;
-    protected EEventType eventType;
+    protected EventType eventType;
     protected final long time;
 
-    public EncryptionLogEventArgs(IEncryptionAlgorithm encryptionAlgorithm, String inSource, String outSource, long time, EEventType eventType) {
+    public EncryptionLogEventArgs(IEncryptionAlgorithm encryptionAlgorithm, String inSource, String outSource, long time, EventType eventType) {
         this.eventType = eventType;
         this.encryptionAlgorithm = encryptionAlgorithm;
         this.outSource = outSource;
@@ -21,7 +21,7 @@ public abstract class EncryptionLogEventArgs {
         this.time = time;
     }
 
-    public void setEventType(EEventType eventType) {
+    public void setEventType(EventType eventType) {
         this.eventType = eventType;
     }
 

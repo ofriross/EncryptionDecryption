@@ -23,9 +23,6 @@ public class XorEncryption extends BasicEncryption {
             else
                 currentCharString.setCharAt(binIndex, '1');
         }
-        int computedChar = Integer.parseInt(currentCharString.toString(), 2);
-        if (computedChar == 13 || computedChar == 133)
-            ;//TODO: fill
-        return computedChar;
+        return Integer.parseInt(currentCharString.toString(), 2);
     }
 }

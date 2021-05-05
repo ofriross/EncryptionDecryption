@@ -1,17 +1,17 @@
 package logs;
 
+import Events.EventTypeProcess;
 import complexEncryptions.IEncryptionAlgorithm;
-import enums.EEventType;
 
 import java.util.Objects;
 
 public class HashMapKey {
     private final IEncryptionAlgorithm encryptionAlgorithm;
-    private final EEventType eventType;
+    private final EventTypeProcess eventTypeProcess;
 
-    public HashMapKey(IEncryptionAlgorithm encryptionAlgorithm, EEventType eventType) {
+    public HashMapKey(IEncryptionAlgorithm encryptionAlgorithm, EventTypeProcess eventTypeProcess) {
         this.encryptionAlgorithm = encryptionAlgorithm;
-        this.eventType = eventType;
+        this.eventTypeProcess = eventTypeProcess;
     }
 
     @Override
@@ -19,11 +19,11 @@ public class HashMapKey {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         HashMapKey that = (HashMapKey) o;
-        return encryptionAlgorithm.equals(that.encryptionAlgorithm) && eventType == that.eventType;
+        return Objects.equals(encryptionAlgorithm, that.encryptionAlgorithm) && Objects.equals(eventTypeProcess, that.eventTypeProcess);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(encryptionAlgorithm, eventType);
+        return Objects.hash(encryptionAlgorithm, eventTypeProcess);
     }
 }

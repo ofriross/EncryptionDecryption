@@ -2,18 +2,14 @@ package FileManagingTests;
 
 import FileManaging.FileEncryptor;
 import FileManaging.FileOperations;
-import basicEncryptions.IBasicEncryption;
+import General.Constants;
 import basicEncryptions.ShiftUpEncryption;
-import enums.EActionEncryptOrDecrypt;
-//TODO: add this back //import org.apache.log4j.BasicConfigurator;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.nio.file.Path;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 public class FileEncryptorTest {
 
@@ -37,7 +33,7 @@ public class FileEncryptorTest {
         String actualData = "";
         try {
             originalData = FileOperations.readFile(fileIn);
-            actualData = FileOperations.readFile(filesLocations + "\\decrypted\\testEncryptDecrypt.txt");
+            actualData = FileOperations.readFile(Path.of(filesLocations, Constants.DECRYPT_FOLDER_NAME, "testEncryptDecrypt.txt").toString());
         } catch (IOException exception) {
             exception.printStackTrace();
             return;

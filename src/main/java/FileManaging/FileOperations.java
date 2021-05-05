@@ -11,18 +11,13 @@ public class FileOperations {
     public static String readFile(String fileName) throws FileNotFoundException {
         StringBuilder data = new StringBuilder();
         try {
-            File myObj = new File(fileName);
-            Scanner myReader = new Scanner(myObj);
-            while (myReader.hasNext()) {
-                data.append(myReader.next());
-                //data.append("\n");
-            }
-            data.deleteCharAt(data.length() - 1);
-            myReader.close();
-        } catch (FileNotFoundException e) {
-            throw new FileNotFoundException("The file '" + fileName + "' wasn't found");
+            FileReader fr = new FileReader(fileName);
+            int currentChar;
+            while ((currentChar = fr.read()) != -1)
+                data.append((char) currentChar);
+        } catch (IOException exception) {
+            throw new FileNotFoundException("An error occurred while trying to read the file '" + fileName + "'.");
         }
-        System.out.println("DATA==================================="+data.toString());
         return data.toString();
     }
 
@@ -54,8 +49,8 @@ public class FileOperations {
         }
     }
 
-    public static String createFolder(String directoryLocation, String directoryName) {
-        String folderName = directoryLocation + "\\" + directoryName;
+    public static String createFolder(String directoryPath, String directoryName) {
+        String folderName = Path.of(directoryPath, directoryName).toString();
         File fileToCreate = new File(folderName);
         if (!fileToCreate.exists()) {
             fileToCreate.mkdirs();
@@ -63,12 +58,12 @@ public class FileOperations {
         return folderName;
     }
 
-    public static ArrayList<String> getFileNamesFromFolder(String directory) throws IOException {
+    public static ArrayList<String> getFileNamesFromFolder(String directoryPath) throws IOException {
         ArrayList<String> folderContent = new ArrayList<>();
-        File folder = new File(directory);
+        File folder = new File(directoryPath);
         File[] listOfFiles = folder.listFiles();
         if (listOfFiles == null)
-            throw new IOException("The folder '" + directory + "' is empty or does not exist");
+            throw new IOException("The folder '" + directoryPath + "' is empty or does not exist");
         for (File file : listOfFiles) {
             if (file.isFile() && file.getName().endsWith(".txt")) {
                 if (!file.getName().equals("key.txt"))

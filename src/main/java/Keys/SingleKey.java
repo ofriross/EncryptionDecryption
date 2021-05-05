@@ -16,7 +16,7 @@ public class SingleKey extends Key {
         this.encryptionType = encryptionType;
         Random r = new Random();
         value = r.nextInt(Constants.MAX_ASCII_VALUE) + 1;
-        //value=1;
+        value=166;
     }
 
     public String toString() {

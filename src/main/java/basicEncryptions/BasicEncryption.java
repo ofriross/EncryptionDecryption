@@ -1,7 +1,5 @@
 package basicEncryptions;
 
-import Exceptions.ProblematicCharInEncryption;
-import FileManaging.FileEncryptor;
 import General.Constants;
 import Keys.Key;
 import Keys.SingleKey;
@@ -36,13 +34,7 @@ public abstract class BasicEncryption implements IBasicEncryption {
     private static String encryptDecrypt(String data, int key, IBasicEncryption basicEncryption, EActionEncryptOrDecrypt action) {
         StringBuilder encryption = new StringBuilder(data);
         for (int index = 0; index < data.length(); index++) {
-            int currentChar;
-            try {
-                currentChar = basicEncryption.computeChar(data.charAt(index), key, action);
-            } catch (ProblematicCharInEncryption problematicCharInEncryption) {
-                problematicCharInEncryption.printStackTrace();
-                return null;//TODO: fix this
-            }
+            int currentChar = basicEncryption.computeChar(data.charAt(index), key, action);
             while (currentChar < 0)
                 currentChar += (Constants.MAX_ASCII_VALUE + 1);
             currentChar %= (Constants.MAX_ASCII_VALUE + 1);

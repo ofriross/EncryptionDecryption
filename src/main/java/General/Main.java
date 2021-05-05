@@ -2,20 +2,32 @@ package General;
 
 import FileManaging.FileEncryptor;
 import MultiThreading.ASyncDirectoryProcessor;
-import MultiThreading.SyncDirectoryProcessor;
 import basicEncryptions.ShiftMultiplyEncryption;
 import basicEncryptions.ShiftUpEncryption;
 import basicEncryptions.XorEncryption;
 import complexEncryptions.DoubleEncryption;
 import complexEncryptions.RepeatEncryption;
 import org.apache.log4j.BasicConfigurator;
-/*import org.apache.log4j.BasicConfigurator;*/
 
 import java.io.IOException;
 
 public class Main {
 
     public static void main(String[] args) throws IOException {
+        //FileOperations.writeFile("debuggingFiles\\tst.txt","a");
+        /*int ch=256;
+        int lastChar=0;
+        for (int i = 0; i < 256; i++) {
+            ch = i;
+            FileOperations.writeFile("debuggingFiles\\tst.txt", String.valueOf((char)ch));
+            String cha = FileOperations.readFile("debuggingFiles\\tst.txt");
+            int chAfter=cha.charAt(0);
+            if (chAfter!=i)
+                System.out.println("heyyy '" + chAfter + "'");
+        }
+        System.out.println("last ch="+ch);
+        if (ch == 255)
+            return;*/
         BasicConfigurator.configure();
         String file = "C:\\enc\\test.txt";
         String directory = "debuggingFiles";
@@ -51,8 +63,6 @@ public class Main {
         FileEncryptor fed = new FileEncryptor(encSUD);
         FileEncryptor fedd = new FileEncryptor(encSUDD);
         FileEncryptor fe3d = new FileEncryptor(encSU3D);
-
-
         //if (num == 1) {
         //fe.encryptFile(directory+"\\tested1.txt",directory+"\\tested1_encrypted.txt",directory+"\\key.txt");
         //fem.encryptFile(directory+"\\tested1.txt",directory+"\\tested1_encrypted.txt",directory+"\\key.txt");
