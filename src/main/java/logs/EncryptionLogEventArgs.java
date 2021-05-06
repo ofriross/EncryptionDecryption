@@ -2,6 +2,9 @@ package logs;
 
 import Events.EventType;
 import complexEncryptions.IEncryptionAlgorithm;
+import enums.EActionEncryptOrDecrypt;
+import enums.EInputType;
+import enums.EProgress;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -10,19 +13,28 @@ public abstract class EncryptionLogEventArgs {
     protected final IEncryptionAlgorithm encryptionAlgorithm;
     protected final String outSource;
     protected final String inSource;
-    protected EventType eventType;
+    protected final EActionEncryptOrDecrypt actionEncryptOrDecrypt;
+    protected final EProgress progress;
+    protected final EInputType inputType;
     protected final long time;
 
-    public EncryptionLogEventArgs(IEncryptionAlgorithm encryptionAlgorithm, String inSource, String outSource, long time, EventType eventType) {
-        this.eventType = eventType;
+    public EncryptionLogEventArgs(IEncryptionAlgorithm encryptionAlgorithm, String inSource, String outSource, long time,
+                                  EActionEncryptOrDecrypt actionEncryptOrDecrypt, EInputType inputType, EProgress progress) {
+        this.actionEncryptOrDecrypt = actionEncryptOrDecrypt;
+        this.progress = progress;
+        this.inputType = inputType;
         this.encryptionAlgorithm = encryptionAlgorithm;
         this.outSource = outSource;
         this.inSource = inSource;
         this.time = time;
     }
 
-    public void setEventType(EventType eventType) {
+    /*public void setEventType(EventType eventType) {
         this.eventType = eventType;
+    }*/
+
+    public EProgress getProgress() {
+        return progress;
     }
 
     @Override

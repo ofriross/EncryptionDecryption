@@ -4,29 +4,9 @@ import basicEncryptions.ShiftMultiplyEncryption;
 import enums.EActionEncryptOrDecrypt;
 import org.junit.Test;
 
-import java.util.ArrayList;
-
 import static org.junit.Assert.assertEquals;
 
 public class ShiftMultiplyEncryptionTest {
-    @Test
-    public void encryptFileBasicCase() {
-
-        ArrayList<String> data = new ArrayList<>();
-        ArrayList<String> expectedEncryption = new ArrayList<>();
-        data.add("abc");
-        expectedEncryption.add("abc");
-        BasicEncryptionFunctions.testerEncryptFile(1, data, expectedEncryption, new ShiftMultiplyEncryption());
-    }
-
-    @Test
-    public void encryptFileRoundTrip() {
-        ArrayList<String> data = new ArrayList<>();
-        ArrayList<String> expectedEncryption = new ArrayList<>();
-        data.add("abc");
-        expectedEncryption.add("#&)");
-        BasicEncryptionFunctions.testerEncryptFile(3, data, expectedEncryption, new ShiftMultiplyEncryption());
-    }
 
     @Test
     public void computeCharEncryptBasicCase() {

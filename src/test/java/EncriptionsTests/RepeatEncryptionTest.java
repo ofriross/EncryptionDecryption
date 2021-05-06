@@ -1,6 +1,5 @@
 package EncriptionsTests;
 
-import FileManaging.FileNameAndContent;
 import Keys.RepeatKey;
 import complexEncryptions.IEncryptionAlgorithm;
 import complexEncryptions.RepeatEncryption;
@@ -14,43 +13,31 @@ import static org.mockito.Mockito.when;
 
 public class RepeatEncryptionTest {
     @Test
-    public void encryptFileMultipleRepeat() {
-        String[] data = {"first", "second", "third", "forth", "fifth"};
-        testerEncryptFile(4, data);
+    public void performEncryption() {
+        IEncryptionAlgorithm encryptionAlgorithmMock = Mockito.mock(IEncryptionAlgorithm.class);
+        RepeatKey repeatKey = (RepeatKey) (new RepeatEncryption(encryptionAlgorithmMock, 4)).initKey();
+
+        when(encryptionAlgorithmMock.performEncryption("dataAfter0Encryptions", repeatKey.getRepeatedKey())).thenReturn("dataAfter1Encryptions");
+        when(encryptionAlgorithmMock.performEncryption("dataAfter1Encryptions", repeatKey.getRepeatedKey())).thenReturn("dataAfter2Encryptions");
+        when(encryptionAlgorithmMock.performEncryption("dataAfter2Encryptions", repeatKey.getRepeatedKey())).thenReturn("dataAfter3Encryptions");
+        when(encryptionAlgorithmMock.performEncryption("dataAfter3Encryptions", repeatKey.getRepeatedKey())).thenReturn("dataAfter4Encryptions");
+        RepeatEncryption repeatEncryption = new RepeatEncryption(encryptionAlgorithmMock, 4);
+        String actualResult = repeatEncryption.performEncryption("dataAfter0Encryptions", repeatKey);
+
+        assertEquals("dataAfter4Encryptions", actualResult);
     }
 
     @Test
-    public void encryptFileSingleRepeat() {
-        String[] data = {"hey", "ney"};
-        testerEncryptFile(1, data);
-    }
-
-    private void testerEncryptFile(int repeatN, String[] data) {
-
+    public void performDecryption() {
         IEncryptionAlgorithm encryptionAlgorithmMock = Mockito.mock(IEncryptionAlgorithm.class);
-        RepeatKey repeatKey = (RepeatKey) (new RepeatEncryption(encryptionAlgorithmMock, repeatN)).initKey();
+        ArrayList<Integer> keys = new ArrayList<>();
+        //DoubleEncryption doubleEncryptionMock = new DoubleEncryption(encryptionAlgorithmMock);
 
-        FileNameAndContent[] fileNameAndContents = new FileNameAndContent[repeatN+1];
-        for (int i = 0; i < fileNameAndContents.length; i++)
-            fileNameAndContents[i] = new FileNameAndContent("file", data[i]);
+        when(encryptionAlgorithmMock.performDecryption("dataBeforeDecryption", keys)).thenReturn("dataAfterDecryption");
 
-        ArrayList<FileNameAndContent> fileNameAndContents1 = new ArrayList<>();
-        fileNameAndContents1.add(fileNameAndContents[0]);
-        for (int i = 1; i <= repeatN; i++) {
-            ArrayList<FileNameAndContent> fileNameAndContents2 = new ArrayList<>();
-            fileNameAndContents2.add(fileNameAndContents[i]);
-            //TODO add back //when(encryptionAlgorithmMock.encryptFile(fileNameAndContents1, repeatKey.getRepeatedKey())).thenReturn(fileNameAndContents2);
-            fileNameAndContents1 = fileNameAndContents2;
-        }
+        RepeatEncryption repeatEncryption = new RepeatEncryption(encryptionAlgorithmMock, 111);
+        String actualResult = repeatEncryption.performDecryption("dataBeforeDecryption", keys);
 
-        RepeatEncryption repeatEncryptionMOCK = new RepeatEncryption(encryptionAlgorithmMock, repeatN);
-        ArrayList<FileNameAndContent> fileNameAndContentsFirst = new ArrayList<>();
-        fileNameAndContentsFirst.add(fileNameAndContents[0]);
-        ArrayList<FileNameAndContent> expectedEncryption = new ArrayList<>();
-        expectedEncryption.add(fileNameAndContents[repeatN]);
-
-        //TODO add back //ArrayList<FileNameAndContent> actualEncryption = repeatEncryptionMOCK.encryptFile(fileNameAndContentsFirst, repeatKey);
-
-        //TODO add back //assertEquals(expectedEncryption, actualEncryption);
+        assertEquals("dataAfterDecryption", actualResult);
     }
 }

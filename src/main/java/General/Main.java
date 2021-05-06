@@ -2,6 +2,7 @@ package General;
 
 import FileManaging.FileEncryptor;
 import MultiThreading.ASyncDirectoryProcessor;
+import MultiThreading.EncryptionDecryptionThread;
 import basicEncryptions.ShiftMultiplyEncryption;
 import basicEncryptions.ShiftUpEncryption;
 import basicEncryptions.XorEncryption;
@@ -10,6 +11,8 @@ import complexEncryptions.RepeatEncryption;
 import org.apache.log4j.BasicConfigurator;
 
 import java.io.IOException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Main {
 
@@ -122,7 +125,18 @@ public class Main {
 
 //        SyncDirectoryProcessor syncDirectoryProcessor = new SyncDirectoryProcessor("debuggingFiles", encSU);
 //        syncDirectoryProcessor.encryptAndDecryptFolder();
-        ASyncDirectoryProcessor aSyncDirectoryProcessor = new ASyncDirectoryProcessor(10, "debuggingFiles", encSU);
-        aSyncDirectoryProcessor.encryptAndDecryptFolder();
+//        ASyncDirectoryProcessor aSyncDirectoryProcessor = new ASyncDirectoryProcessor(10, "debuggingFiles", encSU);
+//        aSyncDirectoryProcessor.encryptAndDecryptFolder();
+
+        ExecutorService executor = Executors.newFixedThreadPool(5);
+        for (int i = 0; i < 10; i++) {
+            Runnable worker = new EncryptionDecryptionThread("debuggingFiles", );
+            executor.execute(worker);
+        }
+        executor.shutdown();
+        while (!executor.isTerminated()) {
+        }
+        System.out.println("Finished all threads");
+
     }
 }

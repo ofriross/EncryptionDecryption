@@ -1,16 +1,18 @@
 package logs;
 
 import Events.EventTypeProcess;
-import Events.EventTypeProcessDebug;
 import complexEncryptions.IEncryptionAlgorithm;
+import enums.EActionEncryptOrDecrypt;
+import enums.EInputType;
 import enums.EProgress;
 
 import java.util.Optional;
 
 public class EncryptionProcessDebugLogEventArgs extends EncryptionLogEventArgs {
 
-    public EncryptionProcessDebugLogEventArgs(IEncryptionAlgorithm encryptionAlgorithm, String inputFilePath, String outputFilePath, long time, EventTypeProcessDebug eventType) {
-        super(encryptionAlgorithm, inputFilePath, outputFilePath, time, eventType);
+    public EncryptionProcessDebugLogEventArgs(IEncryptionAlgorithm encryptionAlgorithm, String inputFilePath, String outputFilePath, long time,
+                                              EActionEncryptOrDecrypt actionEncryptOrDecrypt, EInputType inputType, EProgress progress) {
+        super(encryptionAlgorithm, inputFilePath, outputFilePath, time, actionEncryptOrDecrypt, inputType, progress);
     }
 
     public String makeEncryptionLogMessage(Optional<String> data) {

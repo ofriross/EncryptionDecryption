@@ -1,18 +1,25 @@
 package EncriptionsTests;
 
 import basicEncryptions.ShiftMultiplyEncryption;
+import basicEncryptions.ShiftUpEncryption;
 import basicEncryptions.XorEncryption;
+import enums.EActionEncryptOrDecrypt;
 import org.junit.Test;
 
 import java.util.ArrayList;
 
+import static org.junit.Assert.assertEquals;
+
 public class XorEncryptionTest {
     @Test
-    public void encryptFileBasicCase() {
-        ArrayList<String> data = new ArrayList<>();
-        ArrayList<String> expectedEncryption = new ArrayList<>();
-        data.add("bcd");
-        expectedEncryption.add("cbe");
-        BasicEncryptionFunctions.testerEncryptFile(1, data, expectedEncryption, new XorEncryption());
+    public void computeCharEncrypt() {
+        int actualResult = (new XorEncryption()).computeChar(97, 13, EActionEncryptOrDecrypt.encrypt);
+        assertEquals(108, actualResult);
+    }
+
+    @Test
+    public void computeCharEnDecrypt() {
+        int actualResult = (new XorEncryption()).computeChar(108, 13, EActionEncryptOrDecrypt.encrypt);
+        assertEquals(97, actualResult);
     }
 }
