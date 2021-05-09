@@ -3,6 +3,7 @@ package General;
 import FileManaging.FileEncryptor;
 import MultiThreading.ASyncDirectoryProcessor;
 import MultiThreading.EncryptionDecryptionThread;
+import MultiThreading.SyncDirectoryProcessor;
 import basicEncryptions.ShiftMultiplyEncryption;
 import basicEncryptions.ShiftUpEncryption;
 import basicEncryptions.XorEncryption;
@@ -110,33 +111,9 @@ public class Main {
         //fe3d.decryptFile(directory+"\\tested1_encrypted.txt",directory+"\\tested1_decrypted.txt",directory+"\\key.txt");
         //fe.decryptFolder("debuggingFiles");
         System.out.print("the files got decrypted.\n");
-        //}
 
-
-        /*ArrayList<FileNameAndContent> allFilesNameAndData;
-        try {
-            allFilesNameAndData = FileOperations.readDirectory("C:\\enc");
-        } catch (IOException exception) {
-            exception.printStackTrace();
-            return;
-        }
-        String directoryLocation = FileOperations.createDirectory("C:\\enc", "encrypted");
-        FileOperations.writeMultipleFilesToDirectory(allFilesNameAndData,directoryLocation);*/
-
-//        SyncDirectoryProcessor syncDirectoryProcessor = new SyncDirectoryProcessor("debuggingFiles", encSU);
-//        syncDirectoryProcessor.encryptAndDecryptFolder();
-//        ASyncDirectoryProcessor aSyncDirectoryProcessor = new ASyncDirectoryProcessor(10, "debuggingFiles", encSU);
-//        aSyncDirectoryProcessor.encryptAndDecryptFolder();
-
-        ExecutorService executor = Executors.newFixedThreadPool(5);
-        for (int i = 0; i < 10; i++) {
-            Runnable worker = new EncryptionDecryptionThread("debuggingFiles", );
-            executor.execute(worker);
-        }
-        executor.shutdown();
-        while (!executor.isTerminated()) {
-        }
-        System.out.println("Finished all threads");
-
+        ASyncDirectoryProcessor.encryptAndDecryptFolder(10, "debuggingFiles", encSU);
+        System.out.println();
+        SyncDirectoryProcessor.encryptAndDecryptFolder( "debuggingFiles", encSU);
     }
 }

@@ -1,5 +1,6 @@
 package MultiThreading;
 
 public interface IDirectoryProcessor {
-    void encryptAndDecryptFolder();
+    static void encryptAndDecryptFolder() {
+    }
 }
