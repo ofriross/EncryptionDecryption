@@ -7,11 +7,13 @@ import java.util.Objects;
 
 public class HashMapKey {
     private final IEncryptionAlgorithm encryptionAlgorithm;
-    private final EventTypeProcess eventTypeProcess;
+    private final String inputFilePath;
+    private final String outputFilePath;
 
-    public HashMapKey(IEncryptionAlgorithm encryptionAlgorithm, EventTypeProcess eventTypeProcess) {
+    public HashMapKey(IEncryptionAlgorithm encryptionAlgorithm, String inputFilePath, String outputFilePath) {
         this.encryptionAlgorithm = encryptionAlgorithm;
-        this.eventTypeProcess = eventTypeProcess;
+        this.inputFilePath = inputFilePath;
+        this.outputFilePath = outputFilePath;
     }
 
     @Override
@@ -19,11 +21,11 @@ public class HashMapKey {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         HashMapKey that = (HashMapKey) o;
-        return Objects.equals(encryptionAlgorithm, that.encryptionAlgorithm) && Objects.equals(eventTypeProcess, that.eventTypeProcess);
+        return encryptionAlgorithm.equals(that.encryptionAlgorithm) && inputFilePath.equals(that.inputFilePath) && outputFilePath.equals(that.outputFilePath);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(encryptionAlgorithm, eventTypeProcess);
+        return Objects.hash(encryptionAlgorithm, inputFilePath, outputFilePath);
     }
 }

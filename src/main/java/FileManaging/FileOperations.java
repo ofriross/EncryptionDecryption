@@ -58,7 +58,7 @@ public class FileOperations {
         return folderName;
     }
 
-    public static ArrayList<String> getFileNamesFromFolder(String directoryPath) throws IOException {
+    public static ArrayList<String> getTxtFilesNamesFromFolder(String directoryPath) throws IOException {
         ArrayList<String> folderContent = new ArrayList<>();
         File folder = new File(directoryPath);
         File[] listOfFiles = folder.listFiles();

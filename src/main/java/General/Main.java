@@ -51,68 +51,8 @@ public class Main {
         DoubleEncryption encSUD = new DoubleEncryption(encSU);
         DoubleEncryption encSUDD = new DoubleEncryption(encSUD);
         RepeatEncryption encSU3D = new RepeatEncryption(encSUD, 3);
-        String enc = "C:\\enc\\test_encrypted_su.txt";
-        String encm = "C:\\enc\\test_encrypted_sm.txt";
-        String encx = "C:\\enc\\test_encrypted_xor.txt";
-        String encxd = "C:\\enc\\test_encrypted_xord.txt";
-        String encR = "C:\\enc\\test_encrypted_suR.txt";
-        String encd = "C:\\enc\\test_encrypted_sud.txt";
-        String encdd = "C:\\enc\\test_encrypted_sudd.txt";
-        String enc3d = "C:\\enc\\test_encrypted_su3d.txt";
-        FileEncryptor fe = new FileEncryptor(encSU);
-        FileEncryptor fem = new FileEncryptor(encSM);
-        FileEncryptor fex = new FileEncryptor(encXor);
-        FileEncryptor fexd = new FileEncryptor(encXorD);
-        FileEncryptor feR = new FileEncryptor(encSUR);
-        FileEncryptor fed = new FileEncryptor(encSUD);
-        FileEncryptor fedd = new FileEncryptor(encSUDD);
-        FileEncryptor fe3d = new FileEncryptor(encSU3D);
-        //if (num == 1) {
-        //fe.encryptFile(directory+"\\tested1.txt",directory+"\\tested1_encrypted.txt",directory+"\\key.txt");
-        //fem.encryptFile(directory+"\\tested1.txt",directory+"\\tested1_encrypted.txt",directory+"\\key.txt");
-        //fex.encryptFile(directory+"\\tested1.txt",directory+"\\tested1_encrypted.txt",directory+"\\key.txt");
-        //feR.encryptFolder(directory);
-        //fexd.encryptFolder(directory);
-        //fed.encryptFolder(directory);
-        //fedd.encryptFolder(directory);
-        //fe3d.encryptFile(directory+"\\tested1.txt",directory+"\\tested1_encrypted.txt",directory+"\\key.txt");
-        //fe.encryptFolder("debuggingFiles");
-        System.out.print("the files got encrypted.\n");
 
-            /*System.out.println("encSU="+encSU.getKeyStrength());
-            System.out.println("encSM="+encSM.getKeyStrength());
-            System.out.println("encXor="+encXor.getKeyStrength());
-            System.out.println("encXorD="+encXorD.getKeyStrength());
-            System.out.println("encSU5="+encSU5.getKeyStrength());
-            System.out.println("encSUDD="+encSUDD.getKeyStrength());
-            System.out.println("encSU3D="+encSU3D.getKeyStrength());
-
-            ArrayList<IEncryptionAlgorithm> ar = new ArrayList<IEncryptionAlgorithm>();
-            ar.add(encSU3D);
-            ar.add(encSM);
-            System.out.println("\nUnsorted");
-            for (int i = 0; i < ar.size(); i++)
-                System.out.println(ar.get(i));
-
-            Collections.sort(ar, new SortByKeyStrength());
-
-            System.out.println("\nSorted by keyStrength");
-            for (int i = 0; i < ar.size(); i++)
-                System.out.println(ar.get(i));*/
-        //}
-        //if (num == 2) {
-        //fe.decryptFile(directory+"\\tested1_encrypted.txt",directory+"\\tested1_decrypted.txt",directory+"\\key.txt");
-        //fem.decryptFile(directory+"\\tested1_encrypted.txt",directory+"\\tested1_decrypted.txt",directory+"\\key.txt");
-        //fex.decryptFile(directory+"\\tested1_encrypted.txt",directory+"\\tested1_decrypted.txt",directory+"\\key.txt");
-        //fexd.decryptFolder(directory);
-        //feR.decryptFolder(directory);
-        //fed.decryptFolder(directory);
-        //fedd.decryptFolder(directory);
-        //fe3d.decryptFile(directory+"\\tested1_encrypted.txt",directory+"\\tested1_decrypted.txt",directory+"\\key.txt");
-        //fe.decryptFolder("debuggingFiles");
-        System.out.print("the files got decrypted.\n");
-
-        ASyncDirectoryProcessor.encryptAndDecryptFolder(10, "debuggingFiles", encSU);
+        ASyncDirectoryProcessor.encryptAndDecryptFolder(10, "debuggingFiles", encSU3D);
         System.out.println();
         SyncDirectoryProcessor.encryptAndDecryptFolder( "debuggingFiles", encSU);
     }

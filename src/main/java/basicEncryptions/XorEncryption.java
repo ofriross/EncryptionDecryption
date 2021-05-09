@@ -9,7 +9,6 @@ public class XorEncryption extends BasicEncryption {
         return super.initKey("Xor");
     }
 
-
     public int computeChar(int currentChar, int key, EActionEncryptOrDecrypt eActionEncryptOrDecrypt) {
         String binaryKey = Integer.toBinaryString(key);
         /** make key and currentChar into a 8 digit binary number, with 0's from left to fill 8 digits */

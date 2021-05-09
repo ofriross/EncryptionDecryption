@@ -4,22 +4,19 @@ import Events.EventTypeProcess;
 import complexEncryptions.IEncryptionAlgorithm;
 import enums.EActionEncryptOrDecrypt;
 import enums.EInputType;
+import enums.ELogType;
 import enums.EProgress;
 
 import java.util.Optional;
 
-public class EncryptionProcessDebugLogEventArgs extends EncryptionLogEventArgs {
-
-    public EncryptionProcessDebugLogEventArgs(IEncryptionAlgorithm encryptionAlgorithm, String inputFilePath, String outputFilePath, long time,
-                                              EActionEncryptOrDecrypt actionEncryptOrDecrypt, EInputType inputType, EProgress progress) {
-        super(encryptionAlgorithm, inputFilePath, outputFilePath, time, actionEncryptOrDecrypt, inputType, progress);
-    }
-
-    public String makeEncryptionLogMessage(Optional<String> data) {
+public class EventProcessDebug {
+    public static String makeEncryptionLogMessage(Optional<String> data, EActionEncryptOrDecrypt actionEncryptOrDecrypt,
+                                                  EInputType inputType, EProgress progress, IEncryptionAlgorithm encryptionAlgorithm,
+                                                  long time, String inSource, String outSource) {
         return "debug later";
-        /*String encryptDecrypt = ((EventTypeProcessDebug) eventType).getEncryptOrDecrypt().toString();
+        /*String encryptDecrypt = actionEncryptOrDecrypt.toString();
         String dataString = data.toString().substring(9, data.toString().length() - 1);
-        if (((EventTypeProcessDebug) eventType).getProgress() == EProgress.start)
+        if (progress == EProgress.start)
             return "The " + encryptDecrypt + "ion for file '" + inSource + "' with algorithm " +
                     encryptionAlgorithm.getType() + ", received the data '" + dataString + "' in time: " +
                     time + "(milliseconds).";

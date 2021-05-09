@@ -44,7 +44,7 @@ public class SyncDirectoryProcessor implements IDirectoryProcessor {
 
         ArrayList<String> allFilesNames;
         try {
-            allFilesNames = FileOperations.getFileNamesFromFolder(directoryPath);
+            allFilesNames = FileOperations.getTxtFilesNamesFromFolder(directoryPath);
         } catch (IOException exception) {
             exception.printStackTrace();
             return;
